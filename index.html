@@ -24,6 +24,13 @@
             --color-salud: #95e1d3;
             --color-general: #a8d8ea;
             --color-rel-auto: #c9a0dc;
+            --color-decisiones: #ffa07a;
+            --color-energia: #98fb98;
+            --color-espiritualidad: #dda0dd;
+            --color-familia: #f0e68c;
+            --color-preguntas: #87ceeb;
+            --color-proyectos: #ffb6c1;
+            --color-viajes: #20b2aa;
         }
         
         body {
@@ -340,6 +347,22 @@
         .tema-gen .tema-header::before { color: var(--color-general); }
         .tema-rel_auto .tema-header { color: var(--color-rel-auto); }
         .tema-rel_auto .tema-header::before { color: var(--color-rel-auto); }
+        .tema-decisiones_elecciones .tema-header { color: var(--color-decisiones); }
+        .tema-decisiones_elecciones .tema-header::before { color: var(--color-decisiones); }
+        .tema-energia_dia .tema-header { color: var(--color-energia); }
+        .tema-energia_dia .tema-header::before { color: var(--color-energia); }
+        .tema-espiritualidad_crecimiento .tema-header { color: var(--color-espiritualidad); }
+        .tema-espiritualidad_crecimiento .tema-header::before { color: var(--color-espiritualidad); }
+        .tema-familia_hogar .tema-header { color: var(--color-familia); }
+        .tema-familia_hogar .tema-header::before { color: var(--color-familia); }
+        .tema-preguntas_si_no .tema-header { color: var(--color-preguntas); }
+        .tema-preguntas_si_no .tema-header::before { color: var(--color-preguntas); }
+        .tema-proyectos_creatividad .tema-header { color: var(--color-proyectos); }
+        .tema-proyectos_creatividad .tema-header::before { color: var(--color-proyectos); }
+        .tema-viajes_mudanzas .tema-header { color: var(--color-viajes); }
+        .tema-viajes_mudanzas .tema-header::before { color: var(--color-viajes); }
+        .tema-linea_tiempo .tema-header { color: var(--accent); }
+        .tema-linea_tiempo .tema-header::before { color: var(--accent); }
         /* ==================== FIN FASE 2 ==================== */
         
         .empty-state { text-align: center; color: var(--text-muted); padding: 2rem; font-style: italic; }
@@ -513,6 +536,87 @@
             text-align: center;
             padding: 2rem;
         }
+
+        /* Nuevos estilos para ficha de arcano */
+        .campo-visible {
+            background: rgba(255,255,255,0.03);
+            border-left: 3px solid var(--accent);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .campo-titulo {
+            color: var(--accent);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .orientacion-par {
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            background: rgba(255,255,255,0.02);
+            border-radius: 4px;
+        }
+
+        .orientacion-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: bold;
+            margin-bottom: 0.2rem;
+        }
+
+        .linea-tiempo-bloque {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.02);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .linea-tiempo-titulo {
+            color: var(--accent);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .posicion-detalle {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .posicion-numero {
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .posicion-nombre {
+            color: var(--text);
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        .posicion-significado {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            font-style: italic;
+        }
+
+        .posicion-paso {
+            color: var(--text);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
@@ -582,7 +686,7 @@
         <div class="filter-grid" id="temas-filter-grid"></div>
         
         <div style="text-align: center; margin-top: 2rem;">
-            <button class="btn" onclick="navigateTo('listado-tiradas')">Ver Tiradas →</button>
+            <button class="btn" onclick="verTiradasFiltradas()">Ver Tiradas →</button>
         </div>
     </section>
 
@@ -627,6 +731,11 @@
             <div style="margin: 1rem 0;"><strong>Intención:</strong><p id="detalle-intencion" style="color: var(--text-muted);">[ intencion ]</p></div>
             <div style="margin: 1rem 0;"><strong>Tiempo de Validez:</strong><p id="detalle-tiempo_validez" style="color: var(--text-muted);">[ tiempo_validez ]</p></div>
             <div style="margin: 1rem 0;"><strong>Cuándo Repetir:</strong><p id="detalle-cuando_repetir" style="color: var(--text-muted);">[ cuando_repetir ]</p></div>
+            
+            <div style="margin: 1.5rem 0; padding-top: 1rem; border-top: 1px solid var(--border);">
+                <h3 style="color: var(--accent); margin-bottom: 1rem;">Orden de las Cartas</h3>
+                <div id="detalle-posiciones"></div>
+            </div>
         </div>
         
         <div style="text-align: center; margin-top: 2rem;">
@@ -756,9 +865,21 @@
                 <input type="hidden" id="arcano-id" value="">
             </div>
             
-            <div class="grid-2">
-                <div id="ficha-tecnica-container"><h4 style="color: var(--accent); margin-bottom: 1rem;">Ficha Técnica</h4></div>
-                <div id="interpretaciones-container"><h4 style="color: var(--accent); margin-bottom: 1rem;">Interpretaciones por Tema</h4></div>
+            <!-- CAMPOS VISIBLES (sin toggle, muestran R e I) -->
+            <div id="campos-visibles-container">
+                <!-- Se llena dinámicamente -->
+            </div>
+            
+            <!-- FICHA TÉCNICA EXPANDIBLE -->
+            <div class="expandible" style="margin-top: 2rem;">
+                <div class="expandible-header" onclick="toggleExpandible(this)">
+                    <span>🔍 Ver Ficha Técnica Completa (Signo, Elemento, Planeta...)</span>
+                </div>
+                <div class="expandible-content">
+                    <div id="ficha-tecnica-container">
+                        <!-- Se llena dinámicamente -->
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -804,38 +925,50 @@
             'numeros': 'Números',
             'chakra': 'Chakra',
             'mantra': 'Mantra',
-            'piedras_cristales': 'Piedras y Cristales',
-            'esencia_incienso': 'Esencias y Inciensos',
-            'aceites_hierbas': 'Aceites y Hierbas',
+            'piedras_': 'Piedras',
+            'cristales': 'Cristales',
+            'esencia_': 'Esencias',
+            'incienso': 'Incienso',
+            'aceites_': 'Aceites',
+            'hierbas': 'Hierbas',
             'cabala': 'Cábala',
             'color': 'Color',
             'planta': 'Planta',
+            // Campos con orientación
+            'palabras_clave': 'Palabras Clave',
+            'alerta': 'Alerta',
+            'proximo_paso': 'Próximo Paso',
+            'respuesta_corta': 'Respuesta Corta',
+            'extra_1': 'Tiempo o Dinámica',
+            'extra_2': 'Lugar o Persona',
+            'recomendaciones_meditacion': 'Recomendaciones',
+            'aspectos_personalidad': 'Aspectos de la Personalidad',
+            'actividades_sugeridas': 'Actividades Sugeridas',
             // Temas principales
-            'gen_recta': 'General Recta',
-            'gen_inv': 'General Invertida',
-            'rel_auto_recta': 'Relaciones & Autoconocimiento Recta',
-            'rel_auto_inv': 'Relaciones & Autoconocimiento Invertida',
-            'amor_recta': 'Amor Recta',
-            'amor_inv': 'Amor Invertida',
-            'trabajo_recta': 'Trabajo Recta',
-            'trabajo_inv': 'Trabajo Invertida',
-            'dinero_recta': 'Dinero Recta',
-            'dinero_inv': 'Dinero Invertida',
-            'salud_recta': 'Salud Recta',
-            'salud_inv': 'Salud Invertida',
-            // Línea del tiempo
-            'pasado_recta': 'Pasado Recta',
-            'pasado_inv': 'Pasado Invertida',
-            'presente_recta': 'Presente Recta',
-            'presente_inv': 'Presente Invertida',
-            'futuro_recta': 'Futuro Recta',
-            'futuro_inv': 'Futuro Invertida'
+            'gen': 'General',
+            'rel_auto': 'Relaciones & Autoconocimiento',
+            'amor': 'Amor',
+            'trabajo': 'Trabajo',
+            'dinero': 'Dinero',
+            'salud': 'Salud',
+            'decisiones_elecciones': 'Decisiones y Elecciones',
+            'energia_dia': 'Energía del Día',
+            'espiritualidad_crecimiento': 'Espiritualidad y Crecimiento',
+            'familia_hogar': 'Familia y Hogar',
+            'preguntas_si_no': 'Preguntas Sí/No',
+            'proyectos_creatividad': 'Proyectos y Creatividad',
+            'viajes_mudanzas': 'Viajes y Mudanzas',
+            'linea_tiempo': 'Línea del Tiempo',
+            // Línea del tiempo específica
+            'pasado': 'Pasado',
+            'presente': 'Presente',
+            'futuro': 'Futuro'
         };
 
-        // TEMAS_FILTRO: 14 temas incluyendo rel_auto = Relaciones & Autoconocimiento
+        // TEMAS_FILTRO: 14 temas
         const TEMAS_FILTRO = [
             { tecnico: 'gen', visual: 'Lecturas Generales' },
-            { tecnico: 'rel_auto', visual: 'Relaciones & Autoconocimiento' },  // NUEVO
+            { tecnico: 'rel_auto', visual: 'Relaciones & Autoconocimiento' },
             { tecnico: 'amor', visual: 'Amor' },
             { tecnico: 'trabajo', visual: 'Trabajo' },
             { tecnico: 'dinero', visual: 'Dinero' },
@@ -850,11 +983,32 @@
             { tecnico: 'linea_tiempo', visual: 'Línea del Tiempo' }
         ];
 
+        // CAMPOS VISIBLES (sin toggle, muestran ambas orientaciones)
+        const CAMPOS_VISIBLES = [
+            { campo: 'caracteristicas', tipo: 'unico' },
+            { campo: 'palabras_clave', tipo: 'doble' },
+            { campo: 'alerta', tipo: 'doble' },
+            { campo: 'proximo_paso', tipo: 'doble' },
+            { campo: 'respuesta_corta', tipo: 'doble' },
+            { campo: 'extra_1', tipo: 'doble', label: 'Tiempo o Dinámica' },
+            { campo: 'extra_2', tipo: 'doble', label: 'Lugar o Persona' },
+            { campo: 'recomendaciones_meditacion', tipo: 'doble', label: 'Recomendaciones' },
+            { campo: 'aspectos_personalidad', tipo: 'doble', label: 'Aspectos de la Personalidad' },
+            { campo: 'actividades_sugeridas', tipo: 'doble', label: 'Actividades Sugeridas' }
+        ];
+
+        // TEMAS CON ORIENTACIÓN
+        const TEMAS_CON_ORIENTACION = [
+            'gen', 'rel_auto', 'amor', 'trabajo', 'dinero', 'salud',
+            'decisiones_elecciones', 'energia_dia', 'espiritualidad_crecimiento',
+            'familia_hogar', 'preguntas_si_no', 'proyectos_creatividad', 'viajes_mudanzas'
+        ];
+
         // VARIABLES GLOBALES DE DATOS (Fase 3)
-        var cartasData = [];      // 78 cartas desde cartas.json (estructura plana)
-        var tiradasData = [];     // Definición de tiradas desde tiradas.json
-        var posicionesData = [];  // Posiciones de cartas desde posiciones.json
-        var combinacionesData = []; // Combinaciones desde combinaciones.json (Fase 7)
+        var cartasData = [];
+        var tiradasData = [];
+        var posicionesData = [];
+        var combinacionesData = [];
         var appDataLoaded = false;
 
         function getLabel(campo) { return LABELS[campo] || campo; }
@@ -936,7 +1090,7 @@
             if (screenId === 'arcanos') renderArcanos();
             else if (screenId === 'explorar-tiradas') { actualizarDisplayModo(); generarBotonesTemas(); }
             else if (screenId === 'listado-tiradas') { actualizarInfoListado(); renderListadoTiradas(); }
-            else if (screenId === 'detalle-arcano') { renderFichaTecnicaReal(); renderInterpretacionesReal(); }
+            else if (screenId === 'detalle-arcano') { renderDetalleArcano(); }
             else if (screenId === 'ejecucion') initExecutionSlots();
             else if (screenId === 'resultado') renderResultado();
         }
@@ -997,6 +1151,165 @@
             });
         }
 
+        // RENDER DETALLE ARCANO (CORREGIDO)
+        function renderDetalleArcano() {
+            if (!appState.arcanoActual) return;
+            
+            var card = cartasData.find(function(c) { return c.id === appState.arcanoActual.id; });
+            if (!card) return;
+            
+            // Renderizar campos visibles (sin toggle, muestran R e I)
+            renderCamposVisibles(card);
+            
+            // Renderizar ficha técnica (expandible)
+            renderFichaTecnicaExpandible(card);
+        }
+
+        function renderCamposVisibles(card) {
+            var container = document.getElementById('campos-visibles-container');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            // Características (único, no tiene recta/inv)
+            if (card.caracteristicas) {
+                var div = document.createElement('div');
+                div.className = 'campo-visible';
+                div.innerHTML = 
+                    '<div class="campo-titulo">' + getLabel('caracteristicas') + '</div>' +
+                    '<div>' + card.caracteristicas + '</div>';
+                container.appendChild(div);
+            }
+            
+            // Campos con orientación doble
+            CAMPOS_VISIBLES.forEach(function(item) {
+                if (item.campo === 'caracteristicas') return; // Ya renderizado arriba
+                
+                var recta = card[item.campo + '_recta'];
+                var inv = card[item.campo + '_inv'];
+                
+                if (!recta && !inv) return;
+                
+                var div = document.createElement('div');
+                div.className = 'campo-visible';
+                
+                var html = '<div class="campo-titulo">' + (item.label || getLabel(item.campo)) + '</div>';
+                
+                if (recta) {
+                    html += '<div class="orientacion-par"><div class="orientacion-label">▲ Recta</div><div>' + recta + '</div></div>';
+                }
+                if (inv) {
+                    html += '<div class="orientacion-par"><div class="orientacion-label">▼ Invertida</div><div>' + inv + '</div></div>';
+                }
+                
+                div.innerHTML = html;
+                container.appendChild(div);
+            });
+            
+            // Temas con orientación (14 temas)
+            TEMAS_CON_ORIENTACION.forEach(function(temaKey) {
+                var recta = card[temaKey + '_recta'];
+                var inv = card[temaKey + '_inv'];
+                
+                if (!recta && !inv) return;
+                
+                var div = document.createElement('div');
+                div.className = 'campo-visible';
+                
+                var html = '<div class="campo-titulo">' + getLabel(temaKey) + '</div>';
+                
+                if (recta) {
+                    html += '<div class="orientacion-par"><div class="orientacion-label">▲ Recta</div><div>' + recta + '</div></div>';
+                }
+                if (inv) {
+                    html += '<div class="orientacion-par"><div class="orientacion-label">▼ Invertida</div><div>' + inv + '</div></div>';
+                }
+                
+                div.innerHTML = html;
+                container.appendChild(div);
+            });
+            
+            // Línea del tiempo (3 bloques: pasado, presente, futuro)
+            var tieneLineaTiempo = card.pasado_recta || card.pasado_invertida || 
+                                   card.presente_recta || card.presente_invertida || 
+                                   card.futuro_recta || card.futuro_invertida;
+            
+            if (tieneLineaTiempo) {
+                var div = document.createElement('div');
+                div.className = 'campo-visible';
+                
+                var html = '<div class="campo-titulo">' + getLabel('linea_tiempo') + '</div>';
+                
+                // Pasado
+                if (card.pasado_recta || card.pasado_invertida) {
+                    html += '<div class="linea-tiempo-bloque">';
+                    html += '<div class="linea-tiempo-titulo">⏮️ Pasado</div>';
+                    if (card.pasado_recta) {
+                        html += '<div class="orientacion-par"><div class="orientacion-label">▲ Recta</div><div>' + card.pasado_recta + '</div></div>';
+                    }
+                    if (card.pasado_invertida) {
+                        html += '<div class="orientacion-par"><div class="orientacion-label">▼ Invertida</div><div>' + card.pasado_invertida + '</div></div>';
+                    }
+                    html += '</div>';
+                }
+                
+                // Presente
+                if (card.presente_recta || card.presente_invertida) {
+                    html += '<div class="linea-tiempo-bloque">';
+                    html += '<div class="linea-tiempo-titulo">⏺️ Presente</div>';
+                    if (card.presente_recta) {
+                        html += '<div class="orientacion-par"><div class="orientacion-label">▲ Recta</div><div>' + card.presente_recta + '</div></div>';
+                    }
+                    if (card.presente_invertida) {
+                        html += '<div class="orientacion-par"><div class="orientacion-label">▼ Invertida</div><div>' + card.presente_invertida + '</div></div>';
+                    }
+                    html += '</div>';
+                }
+                
+                // Futuro
+                if (card.futuro_recta || card.futuro_invertida) {
+                    html += '<div class="linea-tiempo-bloque">';
+                    html += '<div class="linea-tiempo-titulo">⏭️ Futuro</div>';
+                    if (card.futuro_recta) {
+                        html += '<div class="orientacion-par"><div class="orientacion-label">▲ Recta</div><div>' + card.futuro_recta + '</div></div>';
+                    }
+                    if (card.futuro_invertida) {
+                        html += '<div class="orientacion-par"><div class="orientacion-label">▼ Invertida</div><div>' + card.futuro_invertida + '</div></div>';
+                    }
+                    html += '</div>';
+                }
+                
+                div.innerHTML = html;
+                container.appendChild(div);
+            }
+        }
+
+        function renderFichaTecnicaExpandible(card) {
+            var container = document.getElementById('ficha-tecnica-container');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            // Campos de ficha técnica según nueva estructura (separados)
+            var camposFicha = [
+                'signo', 'elemento', 'planeta', 'numeros', 'chakra', 'mantra',
+                'piedras_', 'cristales', 'esencia_', 'incienso', 'aceites_', 'hierbas',
+                'cabala', 'color', 'planta'
+            ];
+            
+            camposFicha.forEach(function(campo) {
+                var valor = card[campo];
+                if (!valor || valor === '-') return;
+                
+                var div = document.createElement('div');
+                div.className = 'ficha-item';
+                div.innerHTML = '<span class="ficha-label">' + getLabel(campo) + ':</span> <span class="ficha-value">' + valor + '</span>';
+                container.appendChild(div);
+            });
+            
+            if (container.children.length === 0) {
+                container.innerHTML = '<div class="empty-state">No hay datos técnicos disponibles</div>';
+            }
+        }
+
         // ESTADO DE LA APLICACIÓN
         var appState = { 
             mazoSeleccionado: null, 
@@ -1011,14 +1324,27 @@
         // FUNCIONES UI
         function generarBotonesTemas() {
             var grid = document.getElementById('temas-filter-grid');
-            if (!grid || grid.children.length > 0) return;
+            if (!grid) return;
+            grid.innerHTML = '';
+            
             TEMAS_FILTRO.forEach(function(tema) {
                 var btn = document.createElement('button');
                 btn.className = 'filter-btn';
                 btn.textContent = tema.visual;
                 btn.onclick = function() { filterByTema(tema.tecnico, this); };
+                if (appState.temaFiltro === tema.tecnico) {
+                    btn.classList.add('active');
+                }
                 grid.appendChild(btn);
             });
+        }
+
+        function verTiradasFiltradas() {
+            if (!appState.temaFiltro) {
+                alert('Por favor, selecciona un tema primero.');
+                return;
+            }
+            navigateTo('listado-tiradas');
         }
 
         // RENDER LISTADO TIRADAS (Fase 3)
@@ -1050,6 +1376,7 @@
                     '<div class="tirada-info">' +
                         '<h4>' + tirada.nombre_tirada + '</h4>' +
                         '<div class="tirada-meta">' + tirada.tema + ' • ' + tirada.num_cartas + ' cartas</div>' +
+                        '<div class="tirada-meta" style="margin-top: 0.3rem; font-style: italic;">' + (tirada.intencion || '') + '</div>' +
                     '</div>' +
                     '<div class="tirada-badge">Ver</div>';
                 container.appendChild(item);
@@ -1066,66 +1393,36 @@
             document.getElementById('detalle-tiempo_validez').textContent = tirada.tiempo_validez || '-';
             document.getElementById('detalle-cuando_repetir').textContent = tirada.cuando_repetir || '-';
             
+            // Renderizar posiciones y paso_a_paso
+            renderPosicionesTirada(tirada.id);
+            
             navigateTo('detalle-tirada');
         }
 
-        function renderFichaTecnicaReal() {
-            var container = document.getElementById('ficha-tecnica-container');
-            if (!container || !appState.arcanoActual) return;
+        function renderPosicionesTirada(tiradaId) {
+            var container = document.getElementById('detalle-posiciones');
+            if (!container) return;
+            container.innerHTML = '';
             
-            var titulo = container.querySelector('h4');
-            container.innerHTML = ''; 
-            if (titulo) container.appendChild(titulo);
-            
-            var card = cartasData.find(function(c) { return c.id === appState.arcanoActual.id; });
-            if (!card) return;
-            
-            var campos = [
-                'numero_original', 'arcano_es', 'caracteristicas', 'signo', 'elemento', 
-                'planeta', 'numeros', 'chakra', 'mantra', 'piedras_cristales', 
-                'esencia_incienso', 'aceites_hierbas', 'cabala', 'color', 'planta'
-            ];
-            
-            campos.forEach(function(campo) {
-                var valor = card[campo] || '-';
-                var div = document.createElement('div'); 
-                div.className = 'ficha-item';
-                div.innerHTML = '<span class="ficha-label">' + getLabel(campo) + ':</span> <span class="ficha-value">' + valor + '</span>';
-                container.appendChild(div);
+            var posiciones = posicionesData.filter(function(p) { 
+                return p.tirada_id === tiradaId; 
+            }).sort(function(a, b) { 
+                return a.posicion - b.posicion; 
             });
-        }
-
-        function renderInterpretacionesReal() {
-            var container = document.getElementById('interpretaciones-container');
-            if (!container || !appState.arcanoActual) return;
             
-            var titulo = container.querySelector('h4');
-            container.innerHTML = ''; 
-            if (titulo) container.appendChild(titulo);
+            if (!posiciones.length) {
+                container.innerHTML = '<div class="empty-state">No hay información de posiciones</div>';
+                return;
+            }
             
-            var card = cartasData.find(function(c) { return c.id === appState.arcanoActual.id; });
-            if (!card) return;
-            
-            // Temas incluyendo rel_auto
-            var temas = [
-                {key: 'gen', label: 'General'},
-                {key: 'rel_auto', label: 'Relaciones & Autoconocimiento'},
-                {key: 'amor', label: 'Amor'},
-                {key: 'trabajo', label: 'Trabajo'},
-                {key: 'dinero', label: 'Dinero'},
-                {key: 'salud', label: 'Salud'}
-            ];
-            
-            temas.forEach(function(tema) {
-                var recta = card[tema.key + '_recta'] || '-';
-                var inv = card[tema.key + '_inv'] || '-';
-                
-                var div = document.createElement('div'); 
-                div.className = 'interpretacion-item tema-' + tema.key;
+            posiciones.forEach(function(pos) {
+                var div = document.createElement('div');
+                div.className = 'posicion-detalle';
                 div.innerHTML = 
-                    '<div class="tema-header">' + tema.label + '</div>' +
-                    '<div><strong>Recta:</strong> ' + recta + '</div>' +
-                    '<div><strong>Invertida:</strong> ' + inv + '</div>';
+                    '<div class="posicion-numero">Carta #' + pos.posicion + '</div>' +
+                    '<div class="posicion-nombre">' + (pos.nombre || 'Posición ' + pos.posicion) + '</div>' +
+                    '<div class="posicion-significado">' + (pos.significado || '') + '</div>' +
+                    '<div class="posicion-paso">' + (pos.paso_a_paso || '') + '</div>';
                 container.appendChild(div);
             });
         }
@@ -1344,7 +1641,7 @@
         function renderInterpretacionesDinamicas() {
             var container = document.getElementById('interpretaciones-dinamicas');
             if (!container || !appState.tiradaActual || !appState.cartasSeleccionadas.length) {
-                container.innerHTML = '<div class="empty-state">No hay datos para interpretar</div>';
+                if (container) container.innerHTML = '<div class="empty-state">No hay datos para interpretar</div>';
                 return;
             }
             
@@ -1392,7 +1689,7 @@
         function renderConclusionDinamica() {
             var container = document.getElementById('conclusion-dinamica');
             if (!container || !appState.cartasSeleccionadas.length) {
-                container.innerHTML = '<div class="empty-state">No hay datos para la conclusión</div>';
+                if (container) container.innerHTML = '<div class="empty-state">No hay datos para la conclusión</div>';
                 return;
             }
             
@@ -1435,7 +1732,15 @@
                 'dinero': 'Las energías materiales fluyen según lo mostrado. Las cartas de Arcanos Mayores sugieren cambios significativos en tu situación financiera.',
                 'salud': 'Escucha los mensajes de tu cuerpo y mente. Esta tirada refleja tu estado energético actual y áreas que necesitan atención.',
                 'gen': 'Esta tirada ofrece una visión general de las energías que te rodean. Integra estos mensajes para tu mayor bien.',
-                'rel_auto': 'Las cartas revelan patrones en tus relaciones y tu relación contigo mismo. Reflexiona sobre el equilibrio entre dar y recibir.'
+                'rel_auto': 'Las cartas revelan patrones en tus relaciones y tu relación contigo mismo. Reflexiona sobre el equilibrio entre dar y recibir.',
+                'decisiones_elecciones': 'Las cartas iluminan los caminos disponibles. Considera tanto las ventajas como las responsabilidades de cada opción.',
+                'energia_dia': 'La configuración actual refleja las tendencias energéticas del día. Úsala como guía para navegar con consciencia.',
+                'espiritualidad_crecimiento': 'Este es un momento de conexión profunda con tu ser interior. Las cartas señalan áreas de evolución espiritual.',
+                'familia_hogar': 'Las dinámicas familiares y del hogar están en foco. Presta atención a los mensajes sobre tu espacio seguro.',
+                'preguntas_si_no': 'La respuesta emerge de la configuración de cartas. Confía en tu intuición al interpretar el mensaje.',
+                'proyectos_creatividad': 'Tu energía creativa fluye de maneras específicas. Las cartas sugieren cómo canalizar mejor tu inspiración.',
+                'viajes_mudanzas': 'Los cambios de ubicación o movimientos están destacados. Considera tanto los riesgos como las oportunidades.',
+                'linea_tiempo': 'El flujo temporal revela patrones del pasado, energías del presente y tendencias del futuro.'
             };
             
             html += '<div style="background: rgba(233, 69, 96, 0.1); border-left: 3px solid var(--accent); padding: 1rem; border-radius: 0 8px 8px 0; margin-top: 1rem;">';
