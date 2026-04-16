@@ -1393,8 +1393,8 @@
             document.getElementById('detalle-tiempo_validez').textContent = tirada.tiempo_validez || '-';
             document.getElementById('detalle-cuando_repetir').textContent = tirada.cuando_repetir || '-';
             
-            // Renderizar posiciones y paso_a_paso
-            renderPosicionesTirada(tirada.id);
+            // Renderizar posiciones y paso_a_paso usando id_tirada
+            renderPosicionesTirada(tirada.id_tirada);
             
             navigateTo('detalle-tirada');
         }
@@ -1404,8 +1404,9 @@
             if (!container) return;
             container.innerHTML = '';
             
+            // CORREGIDO: usar id_tirada en lugar de tirada_id
             var posiciones = posicionesData.filter(function(p) { 
-                return p.tirada_id === tiradaId; 
+                return p.id_tirada === tiradaId; 
             }).sort(function(a, b) { 
                 return a.posicion - b.posicion; 
             });
@@ -1660,7 +1661,7 @@
                 if (!carta) return;
                 
                 var posicionData = posicionesData.find(function(p) {
-                    return p.tirada_id === appState.tiradaActual.id && p.posicion === item.posicion;
+                    return p.id_tirada === appState.tiradaActual.id_tirada && p.posicion === item.posicion;
                 });
                 
                 var nombrePosicion = posicionData ? posicionData.nombre : 'Posición ' + item.posicion;
