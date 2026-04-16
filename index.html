@@ -513,6 +513,69 @@
             text-align: center;
             padding: 2rem;
         }
+
+        /* Nuevos estilos para Fase 3 completada */
+        .ficha-carta-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .ficha-carta-box h4 {
+            color: var(--accent);
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .ficha-grid-mini {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .ficha-grid-mini div {
+            padding: 0.3rem 0;
+        }
+
+        .conclusion-box {
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .conclusion-highlight {
+            background: rgba(233, 69, 96, 0.1);
+            border-left: 3px solid var(--accent);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin-top: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .tema-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--text);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
     </style>
 </head>
 <body>
@@ -674,7 +737,7 @@
                     <span>Ver ficha técnica completa</span>
                 </div>
                 <div class="expandible-content">
-                    <div class="ficha-tecnica-grid" id="ficha-tecnica-dinamica">
+                    <div id="ficha-tecnica-dinamica">
                         <div class="empty-state"><p>Cargando ficha técnica...</p></div>
                     </div>
                 </div>
@@ -835,7 +898,7 @@
         // TEMAS_FILTRO: 14 temas incluyendo rel_auto = Relaciones & Autoconocimiento
         const TEMAS_FILTRO = [
             { tecnico: 'gen', visual: 'Lecturas Generales' },
-            { tecnico: 'rel_auto', visual: 'Relaciones & Autoconocimiento' },  // NUEVO
+            { tecnico: 'rel_auto', visual: 'Relaciones & Autoconocimiento' },
             { tecnico: 'amor', visual: 'Amor' },
             { tecnico: 'trabajo', visual: 'Trabajo' },
             { tecnico: 'dinero', visual: 'Dinero' },
@@ -851,10 +914,10 @@
         ];
 
         // VARIABLES GLOBALES DE DATOS (Fase 3)
-        var cartasData = [];      // 78 cartas desde cartas.json (estructura plana)
-        var tiradasData = [];     // Definición de tiradas desde tiradas.json
-        var posicionesData = [];  // Posiciones de cartas desde posiciones.json
-        var combinacionesData = []; // Combinaciones desde combinaciones.json (Fase 7)
+        var cartasData = [];
+        var tiradasData = [];
+        var posicionesData = [];
+        var combinacionesData = [];
         var appDataLoaded = false;
 
         function getLabel(campo) { return LABELS[campo] || campo; }
@@ -1106,7 +1169,6 @@
             var card = cartasData.find(function(c) { return c.id === appState.arcanoActual.id; });
             if (!card) return;
             
-            // Temas incluyendo rel_auto
             var temas = [
                 {key: 'gen', label: 'General'},
                 {key: 'rel_auto', label: 'Relaciones & Autoconocimiento'},
@@ -1282,14 +1344,173 @@
             document.getElementById('search-results').innerHTML = '<div class="empty-state"><p>Búsqueda en desarrollo (Fase 7)</p></div>'; 
         }
 
-        // RENDER RESULTADO (Fase 3)
+        // ==================== FASE 3 COMPLETADA - RENDER RESULTADO ====================
+        
+        // REEMPLAZAR la función renderResultado() existente
         function renderResultado() {
             renderCartasSeleccionadas();
-            document.getElementById('ficha-tecnica-dinamica').innerHTML = '<div class="empty-state">Ficha técnica: Fase 4</div>';
-            document.getElementById('interpretaciones-dinamicas').innerHTML = '<div class="empty-state">Interpretaciones: Fase 5</div>';
-            document.getElementById('conclusion-dinamica').innerHTML = '<div class="empty-state">Conclusión: Fase 6</div>';
+            renderFichaTecnicaDinamica();      // NUEVO - Parte 2
+            renderInterpretacionesDinamicas(); // NUEVO - Parte 3
+            renderConclusionDinamica();        // NUEVO - Parte 4
         }
 
+        // NUEVA FUNCIÓN - Parte 2: Ficha Técnica de cada carta
+        function renderFichaTecnicaDinamica() {
+            var container = document.getElementById('ficha-tecnica-dinamica');
+            if (!container || !appState.cartasSeleccionadas.length) {
+                container.innerHTML = '<div class="empty-state">No hay cartas seleccionadas</div>';
+                return;
+            }
+            
+            var html = '';
+            appState.cartasSeleccionadas.forEach(function(item) {
+                var carta = cartasData.find(function(c) { return c.id === item.id; });
+                if (!carta) return;
+                
+                var camposFicha = [
+                    {label: 'Número', value: carta.numero_original},
+                    {label: 'Nombre', value: carta.arcano_es},
+                    {label: 'Tipo', value: carta.tipo},
+                    {label: 'Elemento', value: carta.elemento || '-'},
+                    {label: 'Planeta', value: carta.planeta || '-'},
+                    {label: 'Signo', value: carta.signo || '-'},
+                    {label: 'Color', value: carta.color || '-'},
+                    {label: 'Chakra', value: carta.chakra || '-'}
+                ];
+                
+                html += '<div class="ficha-carta-box">';
+                html += '<h4>' + carta.numero_original + ' - ' + carta.arcano_es + 
+                        ' <span style="color: var(--text-muted); font-size: 0.8rem;">(C' + item.posicion + ' | ' + item.orientacion + ')</span></h4>';
+                html += '<div class="ficha-grid-mini">';
+                
+                camposFicha.forEach(function(campo) {
+                    html += '<div><span style="color: var(--accent);">' + campo.label + ':</span> ' + campo.value + '</div>';
+                });
+                
+                html += '</div></div>';
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // NUEVA FUNCIÓN - Parte 3: Interpretaciones por Tema
+        function renderInterpretacionesDinamicas() {
+            var container = document.getElementById('interpretaciones-dinamicas');
+            if (!container || !appState.tiradaActual || !appState.cartasSeleccionadas.length) {
+                container.innerHTML = '<div class="empty-state">No hay datos para interpretar</div>';
+                return;
+            }
+            
+            var tema = appState.tiradaActual.tema || 'gen';
+            var temaVisual = TEMAS_FILTRO.find(function(t) { return t.tecnico === tema; });
+            var temaNombre = temaVisual ? temaVisual.visual : tema;
+            
+            var html = '<div class="tema-badge">Tema: ' + temaNombre + '</div>';
+            
+            // Ordenar cartas por posición
+            var cartasOrdenadas = appState.cartasSeleccionadas.slice().sort(function(a, b) {
+                return a.posicion - b.posicion;
+            });
+            
+            cartasOrdenadas.forEach(function(item) {
+                var carta = cartasData.find(function(c) { return c.id === item.id; });
+                if (!carta) return;
+                
+                // Buscar significado de la posición
+                var posicionData = posicionesData.find(function(p) {
+                    return p.tirada_id === appState.tiradaActual.id && p.posicion === item.posicion;
+                });
+                
+                var nombrePosicion = posicionData ? posicionData.nombre : 'Posición ' + item.posicion;
+                var significadoPosicion = posicionData ? posicionData.significado : '';
+                
+                // Construir key de interpretación según tema y orientación
+                var campoInterpretacion = tema + '_' + (item.orientacion === 'I' ? 'inv' : 'recta');
+                var interpretacion = carta[campoInterpretacion] || carta['gen_' + (item.orientacion === 'I' ? 'inv' : 'recta')] || 'Sin interpretación disponible';
+                
+                // Color según tema
+                var colorClass = 'tema-' + tema;
+                
+                html += '<div class="interpretacion-item ' + colorClass + '" style="background: rgba(255,255,255,0.03); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; border-left: 3px solid var(--accent);">';
+                html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">';
+                html += '<span style="color: var(--accent); font-weight: bold;">' + nombrePosicion + '</span>';
+                html += '<span style="font-size: 0.8rem; color: var(--text-muted);">' + 
+                        carta.numero_original + ' | ' + (item.orientacion === 'R' ? 'Recta' : 'Invertida') + '</span>';
+                html += '</div>';
+                if (significadoPosicion) {
+                    html += '<div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; font-style: italic;">' + significadoPosicion + '</div>';
+                }
+                html += '<div style="line-height: 1.5; color: var(--text);">' + interpretacion + '</div>';
+                html += '</div>';
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // NUEVA FUNCIÓN - Parte 4: Conclusión Final
+        function renderConclusionDinamica() {
+            var container = document.getElementById('conclusion-dinamica');
+            if (!container || !appState.cartasSeleccionadas.length) {
+                container.innerHTML = '<div class="empty-state">No hay datos para la conclusión</div>';
+                return;
+            }
+            
+            // Análisis de la tirada
+            var mayores = 0, menores = 0;
+            var rectas = 0, invertidas = 0;
+            var elementos = {};
+            
+            appState.cartasSeleccionadas.forEach(function(item) {
+                var carta = cartasData.find(function(c) { return c.id === item.id; });
+                if (!carta) return;
+                
+                if (carta.tipo === 'mayor') mayores++; else menores++;
+                if (item.orientacion === 'R') rectas++; else invertidas++;
+                
+                var elem = carta.elemento || 'Desconocido';
+                elementos[elem] = (elementos[elem] || 0) + 1;
+            });
+            
+            var html = '';
+            
+            // Resumen estadístico
+            html += '<div class="conclusion-box">';
+            html += '<h4 style="color: var(--accent); margin-bottom: 0.8rem;">Resumen de la Tirada</h4>';
+            html += '<div class="stats-grid">';
+            html += '<div><strong>Arcanos Mayores:</strong> ' + mayores + '</div>';
+            html += '<div><strong>Arcanos Menores:</strong> ' + menores + '</div>';
+            html += '<div><strong>Cartas Rectas:</strong> ' + rectas + '</div>';
+            html += '<div><strong>Cartas Invertidas:</strong> ' + invertidas + '</div>';
+            html += '</div>';
+            
+            // Elementos predominantes
+            var elemSorted = Object.entries(elementos).sort(function(a, b) { return b[1] - a[1]; });
+            if (elemSorted.length > 0) {
+                html += '<div style="margin-top: 0.8rem;"><strong>Elementos presentes:</strong> ';
+                html += elemSorted.map(function(e) { return e[0] + ' (' + e[1] + ')'; }).join(', ');
+                html += '</div>';
+            }
+            html += '</div>';
+            
+            // Mensaje según el tema
+            var tema = appState.tiradaActual ? appState.tiradaActual.tema : 'gen';
+            var mensajes = {
+                'amor': 'Esta tirada revela las energías presentes en tu vida amorosa. Las cartas invertidas pueden indicar bloqueos emocionales o patrones a sanar.',
+                'trabajo': 'La configuración de cartas sugiere tendencias en tu desarrollo profesional. Presta atención a las oportunidades de crecimiento señaladas.',
+                'dinero': 'Las energías materiales fluyen según lo mostrado. Las cartas de Arcanos Mayores sugieren cambios significativos en tu situación financiera.',
+                'salud': 'Escucha los mensajes de tu cuerpo y mente. Esta tirada refleja tu estado energético actual y áreas que necesitan atención.',
+                'gen': 'Esta tirada ofrece una visión general de las energías que te rodean. Integra estos mensajes para tu mayor bien.',
+                'rel_auto': 'Las cartas revelan patrones en tus relaciones y tu relación contigo mismo. Reflexiona sobre el equilibrio entre dar y recibir.'
+            };
+            
+            html += '<div class="conclusion-highlight">';
+            html += '<p style="margin: 0; font-style: italic;">' + (mensajes[tema] || mensajes['gen']) + '</p>';
+            html += '</div>';
+            
+            container.innerHTML = html;
+        }
+
+        // Función original renderCartasSeleccionadas (Parte 1)
         function renderCartasSeleccionadas() {
             var container = document.getElementById('cartas-seleccionadas-container');
             if (!container) return;
@@ -1314,7 +1535,7 @@
 
         // INICIALIZACIÓN
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🌙 Tarot App - Fase 3: Iniciando...');
+            console.log('🌙 Tarot App - Fase 3 Completada: Iniciando...');
             initApp();
         });
     </script>
