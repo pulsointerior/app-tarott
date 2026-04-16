@@ -1432,4 +1432,302 @@
         </div>
         
         <div class="arcanos-section">
-            <h
+            <h2 class="arcanos-section-title">💰 Deniers (14 cartas)</h2>
+            <div class="arcanos-grid" id="arcanos-deniers-grid"></div>
+        </div>
+        
+        <div class="arcanos-section">
+            <h2 class="arcanos-section-title">⚔️ Épées (14 cartas)</h2>
+            <div class="arcanos-grid" id="arcanos-epees-grid"></div>
+        </div>
+        
+        <div class="arcanos-section">
+            <h2 class="arcanos-section-title">🌿 Bâtons (14 cartas)</h2>
+            <div class="arcanos-grid" id="arcanos-batons-grid"></div>
+        </div>
+    </section>
+
+    <!-- PÁGINA DETALLE ARCANO -->
+    <section id="detalle-arcano" class="screen">
+        <div class="nav-header">
+            <span class="nav-back" onclick="navigateTo('arcanos')">← Volver</span>
+            <span>Ficha del Arcano</span>
+        </div>
+        
+        <div class="card" style="max-width: 800px; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <div class="card-slot" style="margin: 0 auto; width: 150px; height: 250px;"><span class="card-placeholder">🂠</span></div>
+                <div class="arcano-display">
+                    <span id="arcano-numero-original">[ numero_original ]</span> - 
+                    <span id="arcano-nombre">[ arcano_es ]</span>
+                </div>
+                <input type="hidden" id="arcano-id" value="">
+            </div>
+            
+            <!-- CAMPOS VISIBLES (sin toggle, muestran R e I) -->
+            <div id="campos-visibles-container">
+                <!-- Se llena dinámicamente -->
+            </div>
+            
+            <!-- FICHA TÉCNICA EXPANDIBLE -->
+            <div class="expandible" style="margin-top: 2rem;">
+                <div class="expandible-header" onclick="toggleExpandible(this)">
+                    <span>🔍 Ver Ficha Técnica Completa (Signo, Elemento, Planeta...)</span>
+                </div>
+                <div class="expandible-content">
+                    <div id="ficha-tecnica-container">
+                        <!-- Se llena dinámicamente -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PÁGINA MENÚ TIRADAS -->
+    <section id="menu-tiradas" class="screen">
+        <div class="nav-header">
+            <span class="nav-back" onclick="navigateTo('menu-principal')">← Volver</span>
+            <span>Menú Tiradas - Búsqueda</span>
+        </div>
+        
+        <h2 style="text-align: center;">Atajo Directo - Busca tu Tirada</h2>
+        
+        <div style="text-align: center; margin-top: 2rem;">
+            <button class="btn" onclick="navigateTo('menu-principal')">Volver al Menú</button>
+        </div>
+    </section>
+
+    <script>
+        // ==================== FASE 3 — JS BASE (CARGA JSON) ====================
+        
+        // MAPEO DE LABELS (Fase 5 - getLabel)
+        const LABELS = {
+            'id': 'ID',
+            'numero_original': 'Número',
+            'arcano_es': 'Nombre',
+            'tipo': 'Tipo',
+            'caracteristicas': 'Características',
+            'signo': 'Signo',
+            'elemento': 'Elemento',
+            'planeta': 'Planeta',
+            'numeros': 'Números',
+            'chakra': 'Chakra',
+            'mantra': 'Mantra',
+            'piedras_': 'Piedras',
+            'cristales': 'Cristales',
+            'esencia_': 'Esencias',
+            'incienso': 'Incienso',
+            'aceites_': 'Aceites',
+            'hierbas': 'Hierbas',
+            'cabala': 'Cábala',
+            'color': 'Color',
+            'planta': 'Planta',
+            // Campos con orientación
+            'palabras_clave': 'Palabras Clave',
+            'alerta': 'Alerta',
+            'proximo_paso': 'Próximo Paso',
+            'respuesta_corta': 'Respuesta Corta',
+            'extra_1': 'Tiempo o Dinámica',
+            'extra_2': 'Lugar o Persona',
+            'recomendaciones_meditacion': 'Recomendaciones',
+            'aspectos_personalidad': 'Aspectos de la Personalidad',
+            'actividades_sugeridas': 'Actividades Sugeridas',
+            // Temas principales
+            'gen': 'General',
+            'rel_auto': 'Relaciones & Autoconocimiento',
+            'amor': 'Amor',
+            'trabajo': 'Trabajo',
+            'dinero': 'Dinero',
+            'salud': 'Salud',
+            'decisiones_elecciones': 'Decisiones y Elecciones',
+            'energia_dia': 'Energía del Día',
+            'espiritualidad_crecimiento': 'Espiritualidad y Crecimiento',
+            'familia_hogar': 'Familia y Hogar',
+            'preguntas_si_no': 'Preguntas Sí/No',
+            'proyectos_creatividad': 'Proyectos y Creatividad',
+            'viajes_mudanzas': 'Viajes y Mudanzas',
+            'linea_tiempo': 'Línea del Tiempo',
+            // Línea del tiempo específica
+            'pasado': 'Pasado',
+            'presente': 'Presente',
+            'futuro': 'Futuro'
+        };
+
+        // TEMAS_FILTRO: 14 temas
+        const TEMAS_FILTRO = [
+            { tecnico: 'gen', visual: 'Lecturas Generales' },
+            { tecnico: 'rel_auto', visual: 'Relaciones & Autoconocimiento' },
+            { tecnico: 'amor', visual: 'Amor' },
+            { tecnico: 'trabajo', visual: 'Trabajo' },
+            { tecnico: 'dinero', visual: 'Dinero' },
+            { tecnico: 'salud', visual: 'Salud' },
+            { tecnico: 'preguntas_si_no', visual: 'Preguntas Sí/No' },
+            { tecnico: 'energia_dia', visual: 'Energía del Día' },
+            { tecnico: 'decisiones_elecciones', visual: 'Decisiones y Elecciones' },
+            { tecnico: 'espiritualidad_crecimiento', visual: 'Espiritualidad y Crecimiento' },
+            { tecnico: 'proyectos_creatividad', visual: 'Proyectos y Creatividad' },
+            { tecnico: 'viajes_mudanzas', visual: 'Viajes y Mudanzas' },
+            { tecnico: 'familia_hogar', visual: 'Familia y Hogar' },
+            { tecnico: 'linea_tiempo', visual: 'Línea del Tiempo' }
+        ];
+
+        // CAMPOS VISIBLES (sin toggle, muestran ambas orientaciones)
+        const CAMPOS_VISIBLES = [
+            { campo: 'caracteristicas', tipo: 'unico' },
+            { campo: 'palabras_clave', tipo: 'doble' },
+            { campo: 'alerta', tipo: 'doble' },
+            { campo: 'proximo_paso', tipo: 'doble' },
+            { campo: 'respuesta_corta', tipo: 'doble' },
+            { campo: 'extra_1', tipo: 'doble', label: 'Tiempo o Dinámica' },
+            { campo: 'extra_2', tipo: 'doble', label: 'Lugar o Persona' },
+            { campo: 'recomendaciones_meditacion', tipo: 'doble', label: 'Recomendaciones' },
+            { campo: 'aspectos_personalidad', tipo: 'doble', label: 'Aspectos de la Personalidad' },
+            { campo: 'actividades_sugeridas', tipo: 'doble', label: 'Actividades Sugeridas' }
+        ];
+
+        // TEMAS CON ORIENTACIÓN
+        const TEMAS_CON_ORIENTACION = [
+            'gen', 'rel_auto', 'amor', 'trabajo', 'dinero', 'salud',
+            'decisiones_elecciones', 'energia_dia', 'espiritualidad_crecimiento',
+            'familia_hogar', 'preguntas_si_no', 'proyectos_creatividad', 'viajes_mudanzas'
+        ];
+
+        // VARIABLES GLOBALES DE DATOS (Fase 3)
+        var cartasData = [];
+        var tiradasData = [];
+        var posicionesData = [];
+        var combinacionesData = [];
+        var appDataLoaded = false;
+
+        function getLabel(campo) { return LABELS[campo] || campo; }
+
+        // FUNCIÓN GENÉRICA CARGA JSON (Fase 3)
+        async function loadJSON(url) {
+            try {
+                console.log('📥 Cargando:', url);
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('HTTP ' + response.status + ' - ' + response.statusText);
+                const data = await response.json();
+                console.log('✅ Cargado:', url, '-', Array.isArray(data) ? data.length + ' items' : 'OK');
+                return data;
+            } catch (error) {
+                console.error('❌ Error cargando', url + ':', error);
+                throw error;
+            }
+        }
+
+        // INICIALIZACIÓN APP (Fase 3)
+        async function initApp() {
+            try {
+                updateLoadingText('Cargando cartas...');
+                cartasData = await loadJSON('cartas.json');
+                
+                updateLoadingText('Cargando tiradas...');
+                tiradasData = await loadJSON('tiradas.json');
+                
+                updateLoadingText('Cargando posiciones...');
+                posicionesData = await loadJSON('posiciones.json');
+                
+                // Fase 7: Cargar combinaciones (opcional para Fase 3)
+                try {
+                    combinacionesData = await loadJSON('combinaciones.json');
+                } catch (e) {
+                    console.log('Combinaciones no cargadas (Fase 7)');
+                    combinacionesData = [];
+                }
+                
+                appDataLoaded = true;
+                
+                // Habilitar botón entrar
+                document.getElementById('btn-entrar').disabled = false;
+                
+                // Ocultar loading
+                setTimeout(() => {
+                    document.getElementById('loading-overlay').style.display = 'none';
+                }, 500);
+                
+                console.log('🎉 App inicializada:', cartasData.length, 'cartas,', tiradasData.length, 'tiradas,', posicionesData.length, 'posiciones');
+                
+            } catch (error) {
+                updateLoadingText('Error al cargar datos. Verifica los archivos JSON.');
+                document.getElementById('loading-text').innerHTML = 
+                    '<div class="error-message">Error: ' + error.message + '<br>Verifica que cartas.json, tiradas.json y posiciones.json existan.</div>';
+            }
+        }
+
+        function updateLoadingText(text) {
+            const el = document.getElementById('loading-text');
+            if (el) el.textContent = text;
+        }
+
+        // NAVEGACIÓN
+        function navigateTo(screenId) {
+            if (screenId !== 'homepage' && !appDataLoaded) {
+                alert('Cargando datos... por favor espera.');
+                return;
+            }
+            
+            var screens = document.getElementsByClassName('screen');
+            for (var i = 0; i < screens.length; i++) screens[i].classList.remove('active');
+            var target = document.getElementById(screenId);
+            if (target) {
+                target.classList.add('active');
+                window.scrollTo(0, 0);
+            }
+            
+            if (screenId === 'arcanos') renderArcanos();
+            else if (screenId === 'explorar-tiradas') { actualizarDisplayModo(); generarBotonesTemas(); }
+            else if (screenId === 'listado-tiradas') { actualizarInfoListado(); renderListadoTiradas(); }
+            else if (screenId === 'detalle-arcano') { renderDetalleArcano(); }
+            else if (screenId === 'ejecucion') initExecutionSlots();
+            else if (screenId === 'resultado') renderResultado();
+        }
+
+        // RENDER ARCANOS (Fase 3)
+        function renderArcanos() {
+            ['arcanos-mayores-grid', 'arcanos-copas-grid', 'arcanos-deniers-grid', 'arcanos-epees-grid', 'arcanos-batons-grid'].forEach(function(id) {
+                var el = document.getElementById(id);
+                if (el) el.innerHTML = '';
+            });
+            
+            if (!cartasData.length) return;
+            
+            var mayores = cartasData.filter(function(c) { 
+                return c.tipo === 'mayor' || (c.id >= 1 && c.id <= 22); 
+            });
+            var copas = cartasData.filter(function(c) { 
+                return c.tipo === 'copas' || (c.id >= 23 && c.id <= 36); 
+            });
+            var deniers = cartasData.filter(function(c) { 
+                return c.tipo === 'deniers' || (c.id >= 37 && c.id <= 50); 
+            });
+            var epees = cartasData.filter(function(c) { 
+                return c.tipo === 'epees' || (c.id >= 51 && c.id <= 64); 
+            });
+            var batons = cartasData.filter(function(c) { 
+                return c.tipo === 'batons' || (c.id >= 65 && c.id <= 78); 
+            });
+            
+            renderGrupo(mayores, 'arcanos-mayores-grid', 'mayor');
+            renderGrupo(copas, 'arcanos-copas-grid', 'copas');
+            renderGrupo(deniers, 'arcanos-deniers-grid', 'deniers');
+            renderGrupo(epees, 'arcanos-epees-grid', 'epees');
+            renderGrupo(batons, 'arcanos-batons-grid', 'batons');
+        }
+
+        function renderGrupo(grupo, containerId, claseTipo) {
+            var container = document.getElementById(containerId);
+            if (!container) return;
+            
+            grupo.forEach(function(arcano) {
+                var thumb = document.createElement('div');
+                thumb.className = 'arcano-thumb ' + claseTipo;
+                thumb.innerHTML = '<span>' + arcano.numero_original + '</span>';
+                thumb.title = arcano.numero_original + ' - ' + arcano.arcano_es;
+                thumb.onclick = function() {
+                    appState.arcanoActual = { 
+                        id: arcano.id, 
+                        numero_original: arcano.numero_original, 
+                        arcano_es: arcano.arcano_es 
+                    };
+                    document.getElementById('arcano-numero-original').textContent = arcano.numero_original
