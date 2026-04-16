@@ -5,608 +5,146 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tarot App</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --primary: #1a1a2e;
-            --secondary: #16213e;
-            --accent: #e94560;
-            --text: #f5f5f5;
-            --text-muted: #a0a0a0;
-            --border: #2d3a4f;
-            --color-amor: #ff6b9d;
-            --color-trabajo: #4ecdc4;
-            --color-dinero: #ffe66d;
-            --color-salud: #95e1d3;
-            --color-general: #a8d8ea;
-            --color-rel-auto: #c9a0dc;
+            --primary: #1a1a2e; --secondary: #16213e; --accent: #e94560;
+            --text: #f5f5f5; --text-muted: #a0a0a0; --border: #2d3a4f;
+            --color-amor: #ff6b9d; --color-trabajo: #4ecdc4; --color-dinero: #ffe66d;
+            --color-salud: #95e1d3; --color-general: #a8d8ea; --color-rel-auto: #c9a0dc;
         }
-        
         body {
             font-family: 'Georgia', serif;
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: var(--text);
-            min-height: 100vh;
-            overflow-x: hidden;
+            color: var(--text); min-height: 100vh; overflow-x: hidden;
         }
-        
-        .screen {
-            display: none;
-            min-height: 100vh;
-            padding: 2rem;
-        }
-        
-        .screen.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
+        .screen { display: none; min-height: 100vh; padding: 2rem; }
+        .screen.active { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .btn {
-            display: inline-block;
-            padding: 1rem 2rem;
-            background: var(--accent);
-            color: var(--text);
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-family: 'Georgia', serif;
+            display: inline-block; padding: 1rem 2rem; background: var(--accent); color: var(--text);
+            border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; transition: all 0.3s ease;
+            text-transform: uppercase; letter-spacing: 1px; font-family: 'Georgia', serif;
         }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(233, 69, 96, 0.4);
-        }
-        
-        .btn-modo {
-            background: transparent;
-            border: 2px solid var(--accent);
-            color: var(--text);
-        }
-        
-        .btn-modo.active {
-            background: var(--accent);
-            color: var(--text);
-        }
-        
-        .btn-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-        
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(233, 69, 96, 0.4); }
+        .btn-modo { background: transparent; border: 2px solid var(--accent); color: var(--text); }
+        .btn-modo.active { background: var(--accent); color: var(--text); }
+        .btn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem; }
         .nav-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            background: rgba(0,0,0,0.2);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            margin: -2rem -2rem 2rem -2rem;
+            display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem;
+            background: rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 100; margin: -2rem -2rem 2rem -2rem;
         }
-        
-        .nav-back {
-            cursor: pointer;
-            font-size: 1.2rem;
-            color: var(--text-muted);
-        }
-        
-        .nav-back:hover {
-            color: var(--text);
-        }
-        
-        .card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-        }
-        
-        .card:hover {
-            border-color: var(--accent);
-            transform: translateY(-5px);
-        }
-        
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .skeleton {
-            background: linear-gradient(90deg, #2d3a4f 25%, #3d4a5f 50%, #2d3a4f 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            border-radius: 8px;
-        }
-        
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-        
+        .nav-back { cursor: pointer; font-size: 1.2rem; color: var(--text-muted); }
+        .nav-back:hover { color: var(--text); }
+        .card { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; transition: all 0.3s ease; }
+        .card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .skeleton { background: linear-gradient(90deg, #2d3a4f 25%, #3d4a5f 50%, #2d3a4f 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
         .skeleton-text { height: 1rem; margin: 0.5rem 0; }
         .skeleton-title { height: 1.5rem; width: 60%; margin-bottom: 1rem; }
-        
-        .card-slot {
-            width: 120px;
-            height: 200px;
-            background: linear-gradient(145deg, #1e2a3a, #2d3a4f);
-            border: 2px dashed var(--border);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
+        .card-slot { width: 120px; height: 200px; background: linear-gradient(145deg, #1e2a3a, #2d3a4f); border: 2px dashed var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 3rem; cursor: pointer; transition: all 0.3s ease; }
         .card-slot:hover { border-color: var(--accent); }
         .card-slot.selected { border-color: var(--accent); border-style: solid; }
         .card-placeholder { font-size: 4rem; opacity: 0.3; }
-        
-        .execution-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            justify-content: center;
-            margin: 2rem 0;
-        }
-        
+        .execution-grid { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; margin: 2rem 0; }
         .slot-container { text-align: center; }
         .slot-label { margin-top: 0.5rem; color: var(--text-muted); font-size: 0.9rem; }
-        
-        .filter-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 0.5rem;
-            margin: 1rem 0;
-        }
-        
-        .filter-btn {
-            padding: 0.8rem 1rem;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            color: var(--text);
-            cursor: pointer;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            font-family: 'Georgia', serif;
-        }
-        
+        .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.5rem; margin: 1rem 0; }
+        .filter-btn { padding: 0.8rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text); cursor: pointer; border-radius: 6px; transition: all 0.3s ease; font-family: 'Georgia', serif; }
         .filter-btn:hover, .filter-btn.active { background: var(--accent); border-color: var(--accent); }
-        
-        select {
-            width: 100%;
-            padding: 0.8rem;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            color: var(--text);
-            border-radius: 6px;
-            font-size: 1rem;
-            font-family: 'Georgia', serif;
-        }
-        
-        .orientation-toggle {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-            justify-content: center;
-        }
-        
-        .orientation-btn {
-            padding: 0.5rem 1rem;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            color: var(--text);
-            cursor: pointer;
-            border-radius: 4px;
-            font-family: 'Georgia', serif;
-        }
-        
+        select { width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text); border-radius: 6px; font-size: 1rem; font-family: 'Georgia', serif; }
+        .orientation-toggle { display: flex; gap: 0.5rem; margin-top: 0.5rem; justify-content: center; }
+        .orientation-btn { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text); cursor: pointer; border-radius: 4px; font-family: 'Georgia', serif; }
         .orientation-btn.active { background: var(--accent); border-color: var(--accent); }
-        
-        /* ==================== FASE 2 — CSS RESULTADO ==================== */
-        .result-part {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            transition: all 0.3s ease;
-        }
-        
+        .result-part { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin: 1rem 0; transition: all 0.3s ease; }
         .result-part:hover { border-color: var(--accent); }
-        
-        .result-part h3 {
-            color: var(--accent);
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 1.1rem;
-        }
-        
-        .expandible {
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            overflow: hidden;
-        }
-        
-        .expandible-header {
-            background: rgba(255,255,255,0.05);
-            padding: 1rem;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background 0.3s ease;
-        }
-        
+        .result-part h3 { color: var(--accent); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px; font-size: 1.1rem; }
+        .expandible { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 0.5rem; overflow: hidden; }
+        .expandible-header { background: rgba(255,255,255,0.05); padding: 1rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.3s ease; }
         .expandible-header:hover { background: rgba(255,255,255,0.08); }
-        
-        .expandible-header::after {
-            content: '▼';
-            font-size: 0.8rem;
-            transition: transform 0.3s ease;
-        }
-        
+        .expandible-header::after { content: '▼'; font-size: 0.8rem; transition: transform 0.3s ease; }
         .expandible.expanded .expandible-header::after { transform: rotate(180deg); }
-        
-        .expandible-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease;
-            padding: 0 1rem;
-        }
-        
-        .expandible.expanded .expandible-content {
-            max-height: 1000px;
-            padding: 1rem;
-        }
-        
-        .ficha-tecnica-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-        
-        @media (max-width: 768px) {
-            .ficha-tecnica-grid { grid-template-columns: 1fr; }
-        }
-        
-        .interpretacion-item {
-            margin-bottom: 0.8rem;
-            padding-bottom: 0.8rem;
-            border-bottom: 1px solid var(--border);
-        }
-        
+        .expandible-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; padding: 0 1rem; }
+        .expandible.expanded .expandible-content { max-height: 1000px; padding: 1rem; }
+        .ficha-tecnica-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        @media (max-width: 768px) { .ficha-tecnica-grid { grid-template-columns: 1fr; } }
+        .interpretacion-item { margin-bottom: 0.8rem; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border); }
         .interpretacion-item:last-child { border-bottom: none; }
-        
-        .interpretacion-item .tema-header {
-            color: var(--accent);
-            font-weight: bold;
-            margin-bottom: 0.3rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .interpretacion-item .tema-header::before {
-            content: '◆';
-            color: var(--accent);
-            font-size: 0.6rem;
-        }
-        
-        .interpretacion-item .orientacion-tag {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            font-style: italic;
-            margin-left: 0.5rem;
-        }
-        
-        .interpretacion-item .texto-interpretacion {
-            color: var(--text);
-            line-height: 1.5;
-            padding-left: 1rem;
-        }
-        
-        .tema-amor .tema-header { color: var(--color-amor); }
-        .tema-amor .tema-header::before { color: var(--color-amor); }
-        .tema-trabajo .tema-header { color: var(--color-trabajo); }
-        .tema-trabajo .tema-header::before { color: var(--color-trabajo); }
-        .tema-dinero .tema-header { color: var(--color-dinero); }
-        .tema-dinero .tema-header::before { color: var(--color-dinero); }
-        .tema-salud .tema-header { color: var(--color-salud); }
-        .tema-salud .tema-header::before { color: var(--color-salud); }
-        .tema-gen .tema-header { color: var(--color-general); }
-        .tema-gen .tema-header::before { color: var(--color-general); }
-        .tema-rel_auto .tema-header { color: var(--color-rel-auto); }
-        .tema-rel_auto .tema-header::before { color: var(--color-rel-auto); }
-        /* ==================== FIN FASE 2 ==================== */
-        
+        .interpretacion-item .tema-header { color: var(--accent); font-weight: bold; margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.5rem; }
+        .interpretacion-item .tema-header::before { content: '◆'; color: var(--accent); font-size: 0.6rem; }
+        .tema-amor .tema-header { color: var(--color-amor); } .tema-amor .tema-header::before { color: var(--color-amor); }
+        .tema-trabajo .tema-header { color: var(--color-trabajo); } .tema-trabajo .tema-header::before { color: var(--color-trabajo); }
+        .tema-dinero .tema-header { color: var(--color-dinero); } .tema-dinero .tema-header::before { color: var(--color-dinero); }
+        .tema-salud .tema-header { color: var(--color-salud); } .tema-salud .tema-header::before { color: var(--color-salud); }
+        .tema-gen .tema-header { color: var(--color-general); } .tema-gen .tema-header::before { color: var(--color-general); }
+        .tema-rel_auto .tema-header { color: var(--color-rel-auto); } .tema-rel_auto .tema-header::before { color: var(--color-rel-auto); }
         .empty-state { text-align: center; color: var(--text-muted); padding: 2rem; font-style: italic; }
-        
-        #homepage {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-        
+        #homepage { display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         #homepage.active { display: flex; }
-        
-        #homepage h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--accent), #ff6b6b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
+        #homepage h1 { font-size: 3rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--accent), #ff6b6b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         #homepage p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 2rem; max-width: 500px; }
-        
-        .mazo-grid {
-            display: flex;
-            gap: 2rem;
-            justify-content: center;
-            margin: 2rem 0;
-            flex-wrap: wrap;
-        }
-        
-        .mazo-card {
-            width: 150px;
-            height: 200px;
-            background: linear-gradient(145deg, #1e2a3a, #2d3a4f);
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
+        .mazo-grid { display: flex; gap: 2rem; justify-content: center; margin: 2rem 0; flex-wrap: wrap; }
+        .mazo-card { width: 150px; height: 200px; background: linear-gradient(145deg, #1e2a3a, #2d3a4f); border: 2px solid var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; }
         .mazo-card:hover, .mazo-card.selected { border-color: var(--accent); transform: scale(1.05); }
-        
-        .tirada-item {
-            display: grid;
-            grid-template-columns: 50px 1fr auto;
-            gap: 1rem;
-            align-items: center;
-            padding: 1rem;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
+        .tirada-item { display: grid; grid-template-columns: 50px 1fr auto; gap: 1rem; align-items: center; padding: 1rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease; }
         .tirada-item:hover { border-color: var(--accent); background: rgba(233, 69, 96, 0.1); }
         .tirada-number { font-size: 1.5rem; font-weight: bold; color: var(--accent); }
         .tirada-info h4 { margin-bottom: 0.3rem; }
         .tirada-meta { color: var(--text-muted); font-size: 0.9rem; }
         .tirada-badge { background: var(--accent); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; }
-        
-        .search-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-        
-        .search-input {
-            padding: 0.8rem;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            color: var(--text);
-            border-radius: 6px;
-            font-family: 'Georgia', serif;
-        }
-        
+        .search-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0; }
+        .search-input { padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text); border-radius: 6px; font-family: 'Georgia', serif; }
         .arcanos-section { margin-bottom: 2rem; }
-        .arcanos-section-title {
-            font-size: 1.5rem;
-            color: var(--accent);
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--border);
-        }
-        
-        .arcanos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-            gap: 0.8rem;
-        }
-        
-        .arcano-thumb {
-            aspect-ratio: 2/3;
-            background: linear-gradient(145deg, #1e2a3a, #2d3a4f);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            text-align: center;
-            padding: 0.3rem;
-            min-height: 100px;
-        }
-        
+        .arcanos-section-title { font-size: 1.5rem; color: var(--accent); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border); }
+        .arcanos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 0.8rem; }
+        .arcano-thumb { aspect-ratio: 2/3; background: linear-gradient(145deg, #1e2a3a, #2d3a4f); border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; font-size: 0.9rem; text-align: center; padding: 0.3rem; min-height: 100px; }
         .arcano-thumb:hover { border-color: var(--accent); transform: translateY(-3px); }
         .arcano-thumb.mayor { background: linear-gradient(145deg, #2d3a4f, #3d4a5f); }
         .arcano-thumb.copas { background: linear-gradient(145deg, #3a4a31, #4a6741); border-color: #4a6741; }
         .arcano-thumb.deniers { background: linear-gradient(145deg, #6b5914, #8b6914); border-color: #8b6914; }
         .arcano-thumb.epees { background: linear-gradient(145deg, #3a4556, #4a5568); border-color: #4a5568; }
         .arcano-thumb.batons { background: linear-gradient(145deg, #6b3513, #8b4513); border-color: #8b4513; }
-        
-        @media (max-width: 768px) {
-            .screen { padding: 1rem; }
-            #homepage h1 { font-size: 2rem; }
-            .mazo-grid { flex-direction: column; align-items: center; }
-            .execution-grid { flex-direction: column; align-items: center; }
-            .nav-header { margin: -1rem -1rem 2rem -1rem; }
-            .arcanos-grid { grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); }
-        }
-        
+        @media (max-width: 768px) { .screen { padding: 1rem; } #homepage h1 { font-size: 2rem; } .mazo-grid { flex-direction: column; align-items: center; } .execution-grid { flex-direction: column; align-items: center; } .nav-header { margin: -1rem -1rem 2rem -1rem; } .arcanos-grid { grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); } }
         .ficha-item { margin-bottom: 0.8rem; line-height: 1.4; }
         .ficha-label { color: var(--accent); font-weight: bold; display: inline; }
         .ficha-value { color: var(--text); display: inline; }
-        .tema-nombre { color: var(--accent); font-weight: bold; margin-bottom: 0.3rem; }
-        .orientacion-tag { font-size: 0.8rem; color: var(--text-muted); font-style: italic; }
-        .arcano-display { font-size: 1.5rem; color: var(--accent); margin-bottom: 0.5rem; font-weight: bold; }
-        
-        /* Loading overlay Fase 3 */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--primary);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-        
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid var(--border);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; }
+        .loading-spinner { width: 50px; height: 50px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        
-        .loading-text {
-            margin-top: 1rem;
-            color: var(--text-muted);
-        }
-        
-        .error-message {
-            color: var(--accent);
-            text-align: center;
-            padding: 2rem;
-        }
-
-        /* Nuevos estilos para Fase 3 completada */
-        .ficha-carta-box {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .ficha-carta-box h4 {
-            color: var(--accent);
-            margin-bottom: 0.8rem;
-            font-size: 1rem;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 0.5rem;
-        }
-
-        .ficha-grid-mini {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-        }
-
-        .ficha-grid-mini div {
-            padding: 0.3rem 0;
-        }
-
-        .conclusion-box {
-            background: rgba(255,255,255,0.03);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .conclusion-highlight {
-            background: rgba(233, 69, 96, 0.1);
-            border-left: 3px solid var(--accent);
-            padding: 1rem;
-            border-radius: 0 8px 8px 0;
-            margin-top: 1rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 0.5rem;
-            font-size: 0.9rem;
-            margin-bottom: 0.8rem;
-        }
-
-        .tema-badge {
-            display: inline-block;
-            background: var(--accent);
-            color: var(--text);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .loading-text { margin-top: 1rem; color: var(--text-muted); }
+        .error-message { color: var(--accent); text-align: center; padding: 2rem; }
+        .ficha-carta-box { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+        .ficha-carta-box h4 { color: var(--accent); margin-bottom: 0.8rem; font-size: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+        .ficha-grid-mini { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.9rem; }
+        .conclusion-box { background: rgba(255,255,255,0.03); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+        .conclusion-highlight { background: rgba(233, 69, 96, 0.1); border-left: 3px solid var(--accent); padding: 1rem; border-radius: 0 8px 8px 0; margin-top: 1rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.5rem; font-size: 0.9rem; margin-bottom: 0.8rem; }
+        .tema-badge { display: inline-block; background: var(--accent); color: var(--text); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px; }
     </style>
 </head>
 <body>
-
-    <!-- LOADING OVERLAY FASE 3 -->
     <div id="loading-overlay" class="loading-overlay">
         <div class="loading-spinner"></div>
         <div class="loading-text" id="loading-text">Cargando datos del tarot...</div>
     </div>
 
-    <!-- PANTALLA 1: HOMEPAGE -->
     <section id="homepage" class="screen active">
         <h1>🌙 Tarot Místico</h1>
         <p>Descubre los secretos del tarot a través de lecturas guiadas y exploración de arcanos</p>
         <button class="btn" onclick="navigateTo('introduccion')" id="btn-entrar" disabled>[ ENTRAR ]</button>
     </section>
 
-    <!-- PANTALLA 2: INTRODUCCIÓN -->
     <section id="introduccion" class="screen">
         <div class="nav-header">
             <span class="nav-back" onclick="navigateTo('homepage')">← Volver</span>
             <span>Configuración</span>
         </div>
-        
         <h2 style="text-align: center;">Selecciona tu Mazo</h2>
         <div class="mazo-grid" id="mazo-container">
             <div class="mazo-card" data-mazo="1" onclick="selectMazo(1, this)"><span>Mazo 1</span></div>
             <div class="mazo-card" data-mazo="2" onclick="selectMazo(2, this)"><span>Mazo 2</span></div>
             <div class="mazo-card" data-mazo="3" onclick="selectMazo(3, this)"><span>Mazo 3</span></div>
         </div>
-        
         <h2 style="text-align: center; margin-top: 2rem;">Modo de Lectura</h2>
         <div class="btn-grid modo-container" id="modo-container" style="max-width: 600px; margin: 2rem auto;">
             <button class="btn btn-modo" data-modo="automatico" onclick="seleccionarModoYContinuar('automatico', this)">TIRADA AUTOMÁTICA</button>
@@ -614,15 +152,12 @@
         </div>
     </section>
 
-    <!-- PANTALLA 3: MENÚ PRINCIPAL -->
     <section id="menu-principal" class="screen">
         <div class="nav-header">
             <span class="nav-back" onclick="navigateTo('introduccion')">← Volver</span>
             <span>Menú Principal</span>
         </div>
-        
         <h1 style="text-align: center; margin-bottom: 2rem;">Menú Principal</h1>
-        
         <div class="btn-grid" style="max-width: 600px; margin: 0 auto;">
             <button class="btn" onclick="navigateTo('explorar-tiradas')">EXPLORAR TIRADAS</button>
             <button class="btn" onclick="navigateTo('arcanos')">LOS ARCANOS</button>
@@ -630,37 +165,30 @@
         </div>
     </section>
 
-    <!-- PANTALLA 4: EXPLORAR TIRADAS -->
     <section id="explorar-tiradas" class="screen">
         <div class="nav-header">
             <span class="nav-back" onclick="navigateTo('menu-principal')">← Volver</span>
             <span>Explorar por Tema</span>
         </div>
-        
         <h2 style="text-align: center; margin-bottom: 0.5rem;">Filtrar por Tema</h2>
         <p id="modo-actual-display" style="text-align: center; color: var(--accent); margin-bottom: 1rem; font-size: 0.9rem;">
             Modo: <span id="modo-texto">-</span>
         </p>
-        
         <div class="filter-grid" id="temas-filter-grid"></div>
-        
         <div style="text-align: center; margin-top: 2rem;">
             <button class="btn" onclick="navigateTo('listado-tiradas')">Ver Tiradas →</button>
         </div>
     </section>
 
-    <!-- PANTALLA 5: LISTADO DE TIRADAS -->
     <section id="listado-tiradas" class="screen">
         <div class="nav-header">
             <span class="nav-back" onclick="navigateTo('explorar-tiradas')">← Volver</span>
             <span>Listado de Tiradas</span>
         </div>
-        
         <h2 style="margin-bottom: 0.5rem;">Tiradas Disponibles</h2>
         <p id="listado-modo-info" style="color: var(--accent); margin-bottom: 1rem; font-size: 0.9rem;">
             Modo: <span id="listado-modo-texto">-</span> | Tema: <span id="listado-tema-texto">-</span>
         </p>
-        
         <div id="tiradas-skeleton">
             <div class="tirada-item skeleton">
                 <div class="skeleton" style="width: 40px; height: 40px; border-radius: 50%;"></div>
@@ -668,19 +196,16 @@
                 <div class="skeleton" style="width: 60px; height: 30px;"></div>
             </div>
         </div>
-        
         <div id="tiradas-lista" style="display: none;">
             <div class="empty-state"><p>No hay tiradas cargadas</p></div>
         </div>
     </section>
 
-    <!-- PANTALLA 6: DETALLE DE TIRADA -->
     <section id="detalle-tirada" class="screen">
         <div class="nav-header">
             <span class="nav-back" onclick="navigateTo('listado-tiradas')">← Volver</span>
             <span>Detalle de Tirada</span>
         </div>
-        
         <div class="card">
             <h2 id="detalle-nombre_tirada">[ nombre_tirada ]</h2>
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1rem 0;">
@@ -691,38 +216,29 @@
             <div style="margin: 1rem 0;"><strong>Tiempo de Validez:</strong><p id="detalle-tiempo_validez" style="color: var(--text-muted);">[ tiempo_validez ]</p></div>
             <div style="margin: 1rem 0;"><strong>Cuándo Repetir:</strong><p id="detalle-cuando_repetir" style="color: var(--text-muted);">[ cuando_repetir ]</p></div>
         </div>
-        
         <div style="text-align: center; margin-top: 2rem;">
             <button class="btn" onclick="navigateTo('ejecucion')">Iniciar Tirada →</button>
         </div>
     </section>
 
-    <!-- PANTALLA 7: EJECUCIÓN -->
     <section id="ejecucion" class="screen">
         <div class="nav-header">
             <span class="nav-back" onclick="navigateTo('detalle-tirada')">← Volver</span>
             <span>Ejecución de Tirada</span>
         </div>
-        
         <h2 style="text-align: center;">Selecciona las Cartas</h2>
-        
-        <div class="execution-grid" id="execution-slots">
-            <!-- Slots generados dinámicamente desde JSON -->
-        </div>
-        
+        <div class="execution-grid" id="execution-slots"></div>
         <div style="text-align: center; margin-top: 2rem;">
             <button class="btn btn-modo" onclick="toggleAutoMode()" style="margin-right: 1rem;">Modo Automático</button>
             <button class="btn" onclick="navigateTo('resultado')">[ VER RESULTADO ]</button>
         </div>
     </section>
 
-    <!-- PANTALLA 8: RESULTADO -->
     <section id="resultado" class="screen">
         <div class="nav-header">
             <span class="nav-back" onclick="navigateTo('ejecucion')">← Volver</span>
             <span>Resultado de la Tirada</span>
         </div>
-        
         <h1 style="text-align: center; margin-bottom: 2rem;">Resultado</h1>
         
         <div id="resultado-parte-1" class="result-part">
@@ -767,48 +283,39 @@
         </div>
     </section>
 
-    <!-- PÁGINA ARCANOS -->
     <section id="arcanos" class="screen">
         <div class="nav-header">
             <span class="nav-back" onclick="navigateTo('menu-principal')">← Volver</span>
             <span>Los Arcanos</span>
         </div>
-        
         <h1 style="text-align: center;">Los 78 Arcanos</h1>
-        
         <div class="arcanos-section">
             <h2 class="arcanos-section-title">🌟 Arcanos Mayores (22 cartas)</h2>
             <div class="arcanos-grid" id="arcanos-mayores-grid"></div>
         </div>
-        
         <div class="arcanos-section">
             <h2 class="arcanos-section-title">🏆 Copas (14 cartas)</h2>
             <div class="arcanos-grid" id="arcanos-copas-grid"></div>
         </div>
-        
         <div class="arcanos-section">
             <h2 class="arcanos-section-title">💰 Deniers (14 cartas)</h2>
             <div class="arcanos-grid" id="arcanos-deniers-grid"></div>
         </div>
-        
         <div class="arcanos-section">
             <h2 class="arcanos-section-title">⚔️ Épées (14 cartas)</h2>
             <div class="arcanos-grid" id="arcanos-epees-grid"></div>
         </div>
-        
         <div class="arcanos-section">
             <h2 class="arcanos-section-title">🌿 Bâtons (14 cartas)</h2>
             <div class="arcanos-grid" id="arcanos-batons-grid"></div>
         </div>
     </section>
 
-    <!-- PÁGINA DETALLE ARCANO -->
     <section id="detalle-arcano" class="screen">
         <div class="nav-header">
             <span class="nav-back" onclick="navigateTo('arcanos')">← Volver</span>
             <span>Ficha del Arcano</span>
         </div>
-        
         <div class="card" style="max-width: 800px; margin: 0 auto;">
             <div style="text-align: center; margin-bottom: 2rem;">
                 <div class="card-slot" style="margin: 0 auto; width: 150px; height: 250px;"><span class="card-placeholder">🂠</span></div>
@@ -818,7 +325,6 @@
                 </div>
                 <input type="hidden" id="arcano-id" value="">
             </div>
-            
             <div class="grid-2">
                 <div id="ficha-tecnica-container"><h4 style="color: var(--accent); margin-bottom: 1rem;">Ficha Técnica</h4></div>
                 <div id="interpretaciones-container"><h4 style="color: var(--accent); margin-bottom: 1rem;">Interpretaciones por Tema</h4></div>
@@ -826,76 +332,41 @@
         </div>
     </section>
 
-    <!-- PÁGINA MENÚ TIRADAS -->
     <section id="menu-tiradas" class="screen">
         <div class="nav-header">
             <span class="nav-back" onclick="navigateTo('menu-principal')">← Volver</span>
             <span>Menú Tiradas - Búsqueda</span>
         </div>
-        
         <h2 style="text-align: center;">Atajo Directo - Busca tu Tirada</h2>
-        
         <div class="search-container" style="max-width: 800px; margin: 2rem auto;">
             <input type="text" class="search-input" placeholder="Buscar por número..." id="search-numero">
             <input type="text" class="search-input" placeholder="Buscar por nombre..." id="search-nombre">
             <input type="text" class="search-input" placeholder="Buscar por número de cartas..." id="search-num-cartas">
             <input type="text" class="search-input" placeholder="Buscar por tema..." id="search-tema">
         </div>
-        
         <div style="text-align: center;">
             <button class="btn" onclick="searchTiradas()">Buscar</button>
         </div>
-        
         <div id="search-results" style="max-width: 800px; margin: 2rem auto;">
             <div class="empty-state"><p>Resultados aparecerán aquí...</p></div>
         </div>
     </section>
 
     <script>
-        // ==================== FASE 3 — JS BASE (CARGA JSON) ====================
-        
-        // MAPEO DE LABELS (Fase 5 - getLabel)
         const LABELS = {
-            'id': 'ID',
-            'numero_original': 'Número',
-            'arcano_es': 'Nombre',
-            'tipo': 'Tipo',
-            'caracteristicas': 'Características',
-            'signo': 'Signo',
-            'elemento': 'Elemento',
-            'planeta': 'Planeta',
-            'numeros': 'Números',
-            'chakra': 'Chakra',
-            'mantra': 'Mantra',
-            'piedras_cristales': 'Piedras y Cristales',
-            'esencia_incienso': 'Esencias y Inciensos',
-            'aceites_hierbas': 'Aceites y Hierbas',
-            'cabala': 'Cábala',
-            'color': 'Color',
-            'planta': 'Planta',
-            // Temas principales
-            'gen_recta': 'General Recta',
-            'gen_inv': 'General Invertida',
-            'rel_auto_recta': 'Relaciones & Autoconocimiento Recta',
-            'rel_auto_inv': 'Relaciones & Autoconocimiento Invertida',
-            'amor_recta': 'Amor Recta',
-            'amor_inv': 'Amor Invertida',
-            'trabajo_recta': 'Trabajo Recta',
-            'trabajo_inv': 'Trabajo Invertida',
-            'dinero_recta': 'Dinero Recta',
-            'dinero_inv': 'Dinero Invertida',
-            'salud_recta': 'Salud Recta',
-            'salud_inv': 'Salud Invertida',
-            // Línea del tiempo
-            'pasado_recta': 'Pasado Recta',
-            'pasado_inv': 'Pasado Invertida',
-            'presente_recta': 'Presente Recta',
-            'presente_inv': 'Presente Invertida',
-            'futuro_recta': 'Futuro Recta',
-            'futuro_inv': 'Futuro Invertida'
+            'id': 'ID', 'numero_original': 'Número', 'arcano_es': 'Nombre', 'tipo': 'Tipo',
+            'caracteristicas': 'Características', 'signo': 'Signo', 'elemento': 'Elemento',
+            'planeta': 'Planeta', 'numeros': 'Números', 'chakra': 'Chakra', 'mantra': 'Mantra',
+            'piedras_cristales': 'Piedras y Cristales', 'esencia_incienso': 'Esencias y Inciensos',
+            'aceites_hierbas': 'Aceites y Hierbas', 'cabala': 'Cábala', 'color': 'Color', 'planta': 'Planta',
+            'gen_recta': 'General Recta', 'gen_inv': 'General Invertida',
+            'rel_auto_recta': 'Relaciones & Autoconocimiento Recta', 'rel_auto_inv': 'Relaciones & Autoconocimiento Invertida',
+            'amor_recta': 'Amor Recta', 'amor_inv': 'Amor Invertida',
+            'trabajo_recta': 'Trabajo Recta', 'trabajo_inv': 'Trabajo Invertida',
+            'dinero_recta': 'Dinero Recta', 'dinero_inv': 'Dinero Invertida',
+            'salud_recta': 'Salud Recta', 'salud_inv': 'Salud Invertida'
         };
 
-        // TEMAS_FILTRO: 14 temas incluyendo rel_auto = Relaciones & Autoconocimiento
         const TEMAS_FILTRO = [
             { tecnico: 'gen', visual: 'Lecturas Generales' },
             { tecnico: 'rel_auto', visual: 'Relaciones & Autoconocimiento' },
@@ -913,89 +384,50 @@
             { tecnico: 'linea_tiempo', visual: 'Línea del Tiempo' }
         ];
 
-        // VARIABLES GLOBALES DE DATOS (Fase 3)
-        var cartasData = [];
-        var tiradasData = [];
-        var posicionesData = [];
-        var combinacionesData = [];
-        var appDataLoaded = false;
-
+        var cartasData = [], tiradasData = [], posicionesData = [], combinacionesData = [], appDataLoaded = false;
         function getLabel(campo) { return LABELS[campo] || campo; }
 
-        // FUNCIÓN GENÉRICA CARGA JSON (Fase 3)
         async function loadJSON(url) {
             try {
-                console.log('📥 Cargando:', url);
+                console.log('Cargando:', url);
                 const response = await fetch(url);
-                if (!response.ok) throw new Error('HTTP ' + response.status + ' - ' + response.statusText);
+                if (!response.ok) throw new Error('HTTP ' + response.status);
                 const data = await response.json();
-                console.log('✅ Cargado:', url, '-', Array.isArray(data) ? data.length + ' items' : 'OK');
+                console.log('Cargado:', url, '-', Array.isArray(data) ? data.length + ' items' : 'OK');
                 return data;
             } catch (error) {
-                console.error('❌ Error cargando', url + ':', error);
+                console.error('Error cargando', url + ':', error);
                 throw error;
             }
         }
 
-        // INICIALIZACIÓN APP (Fase 3)
         async function initApp() {
             try {
                 updateLoadingText('Cargando cartas...');
                 cartasData = await loadJSON('cartas.json');
-                
                 updateLoadingText('Cargando tiradas...');
                 tiradasData = await loadJSON('tiradas.json');
-                
                 updateLoadingText('Cargando posiciones...');
                 posicionesData = await loadJSON('posiciones.json');
-                
-                // Fase 7: Cargar combinaciones (opcional para Fase 3)
-                try {
-                    combinacionesData = await loadJSON('combinaciones.json');
-                } catch (e) {
-                    console.log('Combinaciones no cargadas (Fase 7)');
-                    combinacionesData = [];
-                }
-                
+                try { combinacionesData = await loadJSON('combinaciones.json'); } catch (e) { combinacionesData = []; }
                 appDataLoaded = true;
-                
-                // Habilitar botón entrar
                 document.getElementById('btn-entrar').disabled = false;
-                
-                // Ocultar loading
-                setTimeout(() => {
-                    document.getElementById('loading-overlay').style.display = 'none';
-                }, 500);
-                
-                console.log('🎉 App inicializada:', cartasData.length, 'cartas,', tiradasData.length, 'tiradas,', posicionesData.length, 'posiciones');
-                
+                setTimeout(function() { document.getElementById('loading-overlay').style.display = 'none'; }, 500);
+                console.log('App inicializada:', cartasData.length, 'cartas,', tiradasData.length, 'tiradas');
             } catch (error) {
-                updateLoadingText('Error al cargar datos. Verifica los archivos JSON.');
-                document.getElementById('loading-text').innerHTML = 
-                    '<div class="error-message">Error: ' + error.message + '<br>Verifica que cartas.json, tiradas.json y posiciones.json existan.</div>';
+                updateLoadingText('Error al cargar datos.');
+                document.getElementById('loading-text').innerHTML = '<div class="error-message">Error: ' + error.message + '<br>Verifica los archivos JSON.</div>';
             }
         }
 
-        function updateLoadingText(text) {
-            const el = document.getElementById('loading-text');
-            if (el) el.textContent = text;
-        }
+        function updateLoadingText(text) { var el = document.getElementById('loading-text'); if (el) el.textContent = text; }
 
-        // NAVEGACIÓN
         function navigateTo(screenId) {
-            if (screenId !== 'homepage' && !appDataLoaded) {
-                alert('Cargando datos... por favor espera.');
-                return;
-            }
-            
+            if (screenId !== 'homepage' && !appDataLoaded) { alert('Cargando datos...'); return; }
             var screens = document.getElementsByClassName('screen');
             for (var i = 0; i < screens.length; i++) screens[i].classList.remove('active');
             var target = document.getElementById(screenId);
-            if (target) {
-                target.classList.add('active');
-                window.scrollTo(0, 0);
-            }
-            
+            if (target) { target.classList.add('active'); window.scrollTo(0, 0); }
             if (screenId === 'arcanos') renderArcanos();
             else if (screenId === 'explorar-tiradas') { actualizarDisplayModo(); generarBotonesTemas(); }
             else if (screenId === 'listado-tiradas') { actualizarInfoListado(); renderListadoTiradas(); }
@@ -1004,31 +436,16 @@
             else if (screenId === 'resultado') renderResultado();
         }
 
-        // RENDER ARCANOS (Fase 3)
         function renderArcanos() {
             ['arcanos-mayores-grid', 'arcanos-copas-grid', 'arcanos-deniers-grid', 'arcanos-epees-grid', 'arcanos-batons-grid'].forEach(function(id) {
-                var el = document.getElementById(id);
-                if (el) el.innerHTML = '';
+                var el = document.getElementById(id); if (el) el.innerHTML = '';
             });
-            
             if (!cartasData.length) return;
-            
-            var mayores = cartasData.filter(function(c) { 
-                return c.tipo === 'mayor' || (c.id >= 1 && c.id <= 22); 
-            });
-            var copas = cartasData.filter(function(c) { 
-                return c.tipo === 'copas' || (c.id >= 23 && c.id <= 36); 
-            });
-            var deniers = cartasData.filter(function(c) { 
-                return c.tipo === 'deniers' || (c.id >= 37 && c.id <= 50); 
-            });
-            var epees = cartasData.filter(function(c) { 
-                return c.tipo === 'epees' || (c.id >= 51 && c.id <= 64); 
-            });
-            var batons = cartasData.filter(function(c) { 
-                return c.tipo === 'batons' || (c.id >= 65 && c.id <= 78); 
-            });
-            
+            var mayores = cartasData.filter(function(c) { return c.tipo === 'mayor' || (c.id >= 1 && c.id <= 22); });
+            var copas = cartasData.filter(function(c) { return c.tipo === 'copas' || (c.id >= 23 && c.id <= 36); });
+            var deniers = cartasData.filter(function(c) { return c.tipo === 'deniers' || (c.id >= 37 && c.id <= 50); });
+            var epees = cartasData.filter(function(c) { return c.tipo === 'epees' || (c.id >= 51 && c.id <= 64); });
+            var batons = cartasData.filter(function(c) { return c.tipo === 'batons' || (c.id >= 65 && c.id <= 78); });
             renderGrupo(mayores, 'arcanos-mayores-grid', 'mayor');
             renderGrupo(copas, 'arcanos-copas-grid', 'copas');
             renderGrupo(deniers, 'arcanos-deniers-grid', 'deniers');
@@ -1039,18 +456,13 @@
         function renderGrupo(grupo, containerId, claseTipo) {
             var container = document.getElementById(containerId);
             if (!container) return;
-            
             grupo.forEach(function(arcano) {
                 var thumb = document.createElement('div');
                 thumb.className = 'arcano-thumb ' + claseTipo;
                 thumb.innerHTML = '<span>' + arcano.numero_original + '</span>';
                 thumb.title = arcano.numero_original + ' - ' + arcano.arcano_es;
                 thumb.onclick = function() {
-                    appState.arcanoActual = { 
-                        id: arcano.id, 
-                        numero_original: arcano.numero_original, 
-                        arcano_es: arcano.arcano_es 
-                    };
+                    appState.arcanoActual = { id: arcano.id, numero_original: arcano.numero_original, arcano_es: arcano.arcano_es };
                     document.getElementById('arcano-numero-original').textContent = arcano.numero_original;
                     document.getElementById('arcano-nombre').textContent = arcano.arcano_es;
                     document.getElementById('arcano-id').value = arcano.id;
@@ -1060,18 +472,9 @@
             });
         }
 
-        // ESTADO DE LA APLICACIÓN
-        var appState = { 
-            mazoSeleccionado: null, 
-            modoLectura: null, 
-            cartasSeleccionadas: [],
-            temaFiltro: null, 
-            arcanoActual: null,
-            tiradaActual: null
-        };
+        var appState = { mazoSeleccionado: null, modoLectura: null, cartasSeleccionadas: [], temaFiltro: null, arcanoActual: null, tiradaActual: null };
         var prevMazoBtn = null, prevModoBtn = null;
 
-        // FUNCIONES UI
         function generarBotonesTemas() {
             var grid = document.getElementById('temas-filter-grid');
             if (!grid || grid.children.length > 0) return;
@@ -1084,74 +487,47 @@
             });
         }
 
-        // RENDER LISTADO TIRADAS (Fase 3)
         function renderListadoTiradas() {
             var container = document.getElementById('tiradas-lista');
             var skeleton = document.getElementById('tiradas-skeleton');
-            
             if (!container) return;
-            
-            var tiradasFiltradas = appState.temaFiltro ? 
-                tiradasData.filter(function(t) { return t.tema === appState.temaFiltro; }) : 
-                tiradasData;
-            
+            var tiradasFiltradas = appState.temaFiltro ? tiradasData.filter(function(t) { return t.tema === appState.temaFiltro; }) : tiradasData;
             if (skeleton) skeleton.style.display = 'none';
             container.style.display = 'block';
             container.innerHTML = '';
-            
-            if (!tiradasFiltradas.length) {
-                container.innerHTML = '<div class="empty-state"><p>No hay tiradas para este tema</p></div>';
-                return;
-            }
-            
+            if (!tiradasFiltradas.length) { container.innerHTML = '<div class="empty-state"><p>No hay tiradas para este tema</p></div>'; return; }
             tiradasFiltradas.forEach(function(tirada, index) {
                 var item = document.createElement('div');
                 item.className = 'tirada-item';
                 item.onclick = function() { seleccionarTirada(tirada); };
-                item.innerHTML = 
-                    '<div class="tirada-number">' + (index + 1) + '</div>' +
-                    '<div class="tirada-info">' +
-                        '<h4>' + tirada.nombre_tirada + '</h4>' +
-                        '<div class="tirada-meta">' + tirada.tema + ' • ' + tirada.num_cartas + ' cartas</div>' +
-                    '</div>' +
-                    '<div class="tirada-badge">Ver</div>';
+                item.innerHTML = '<div class="tirada-number">' + (index + 1) + '</div><div class="tirada-info"><h4>' + tirada.nombre_tirada + '</h4><div class="tirada-meta">' + tirada.tema + ' • ' + tirada.num_cartas + ' cartas</div></div><div class="tirada-badge">Ver</div>';
                 container.appendChild(item);
             });
         }
 
         function seleccionarTirada(tirada) {
             appState.tiradaActual = tirada;
-            
             document.getElementById('detalle-nombre_tirada').textContent = tirada.nombre_tirada;
             document.getElementById('detalle-tema').textContent = tirada.tema;
             document.getElementById('detalle-num_cartas').textContent = tirada.num_cartas;
             document.getElementById('detalle-intencion').textContent = tirada.intencion || '-';
             document.getElementById('detalle-tiempo_validez').textContent = tirada.tiempo_validez || '-';
             document.getElementById('detalle-cuando_repetir').textContent = tirada.cuando_repetir || '-';
-            
             navigateTo('detalle-tirada');
         }
 
         function renderFichaTecnicaReal() {
             var container = document.getElementById('ficha-tecnica-container');
             if (!container || !appState.arcanoActual) return;
-            
             var titulo = container.querySelector('h4');
-            container.innerHTML = ''; 
+            container.innerHTML = '';
             if (titulo) container.appendChild(titulo);
-            
             var card = cartasData.find(function(c) { return c.id === appState.arcanoActual.id; });
             if (!card) return;
-            
-            var campos = [
-                'numero_original', 'arcano_es', 'caracteristicas', 'signo', 'elemento', 
-                'planeta', 'numeros', 'chakra', 'mantra', 'piedras_cristales', 
-                'esencia_incienso', 'aceites_hierbas', 'cabala', 'color', 'planta'
-            ];
-            
+            var campos = ['numero_original', 'arcano_es', 'caracteristicas', 'signo', 'elemento', 'planeta', 'numeros', 'chakra', 'mantra', 'piedras_cristales', 'esencia_incienso', 'aceites_hierbas', 'cabala', 'color', 'planta'];
             campos.forEach(function(campo) {
                 var valor = card[campo] || '-';
-                var div = document.createElement('div'); 
+                var div = document.createElement('div');
                 div.className = 'ficha-item';
                 div.innerHTML = '<span class="ficha-label">' + getLabel(campo) + ':</span> <span class="ficha-value">' + valor + '</span>';
                 container.appendChild(div);
@@ -1161,70 +537,38 @@
         function renderInterpretacionesReal() {
             var container = document.getElementById('interpretaciones-container');
             if (!container || !appState.arcanoActual) return;
-            
             var titulo = container.querySelector('h4');
-            container.innerHTML = ''; 
+            container.innerHTML = '';
             if (titulo) container.appendChild(titulo);
-            
             var card = cartasData.find(function(c) { return c.id === appState.arcanoActual.id; });
             if (!card) return;
-            
-            var temas = [
-                {key: 'gen', label: 'General'},
-                {key: 'rel_auto', label: 'Relaciones & Autoconocimiento'},
-                {key: 'amor', label: 'Amor'},
-                {key: 'trabajo', label: 'Trabajo'},
-                {key: 'dinero', label: 'Dinero'},
-                {key: 'salud', label: 'Salud'}
-            ];
-            
+            var temas = [{key: 'gen', label: 'General'}, {key: 'rel_auto', label: 'Relaciones & Autoconocimiento'}, {key: 'amor', label: 'Amor'}, {key: 'trabajo', label: 'Trabajo'}, {key: 'dinero', label: 'Dinero'}, {key: 'salud', label: 'Salud'}];
             temas.forEach(function(tema) {
                 var recta = card[tema.key + '_recta'] || '-';
                 var inv = card[tema.key + '_inv'] || '-';
-                
-                var div = document.createElement('div'); 
+                var div = document.createElement('div');
                 div.className = 'interpretacion-item tema-' + tema.key;
-                div.innerHTML = 
-                    '<div class="tema-header">' + tema.label + '</div>' +
-                    '<div><strong>Recta:</strong> ' + recta + '</div>' +
-                    '<div><strong>Invertida:</strong> ' + inv + '</div>';
+                div.innerHTML = '<div class="tema-header">' + tema.label + '</div><div><strong>Recta:</strong> ' + recta + '</div><div><strong>Invertida:</strong> ' + inv + '</div>';
                 container.appendChild(div);
             });
         }
 
-        // INICIALIZAR SLOTS DE EJECUCIÓN (Fase 3)
         function initExecutionSlots() {
             var container = document.getElementById('execution-slots');
             if (!container) return;
             container.innerHTML = '';
-            
             var numSlots = appState.tiradaActual ? appState.tiradaActual.num_cartas : 3;
-            
             for (var i = 1; i <= numSlots; i++) {
                 var slotDiv = document.createElement('div');
                 slotDiv.className = 'slot-container';
-                slotDiv.innerHTML = 
-                    '<div class="card-slot" onclick="selectCardSlot(' + i + ')"><span class="card-placeholder">🂠</span></div>' +
-                    '<div class="slot-label">C' + i + '</div>' +
-                    '<div style="margin-top: 0.5rem;">' +
-                        '<select id="carta-' + i + '" onchange="onCardSelect(' + i + ')">' +
-                            '<option value="">Seleccionar carta...</option>' +
-                            generarOpcionesCartas() +
-                        '</select>' +
-                        '<div class="orientation-toggle">' +
-                            '<button class="orientation-btn active" onclick="setOrientation(' + i + ', \'R\', this)">R</button>' +
-                            '<button class="orientation-btn" onclick="setOrientation(' + i + ', \'I\', this)">I</button>' +
-                        '</div>' +
-                    '</div>';
+                slotDiv.innerHTML = '<div class="card-slot" onclick="selectCardSlot(' + i + ')"><span class="card-placeholder">🂠</span></div><div class="slot-label">C' + i + '</div><div style="margin-top: 0.5rem;"><select id="carta-' + i + '" onchange="onCardSelect(' + i + ')"><option value="">Seleccionar carta...</option>' + generarOpcionesCartas() + '</select><div class="orientation-toggle"><button class="orientation-btn active" onclick="setOrientation(' + i + ', ' + "'R'" + ', this)">R</button><button class="orientation-btn" onclick="setOrientation(' + i + ', ' + "'I'" + ', this)">I</button></div></div>';
                 container.appendChild(slotDiv);
             }
         }
 
         function generarOpcionesCartas() {
             if (!cartasData.length) return '';
-            return cartasData.map(function(c) {
-                return '<option value="' + c.id + '">' + c.numero_original + ' - ' + c.arcano_es + '</option>';
-            }).join('');
+            return cartasData.map(function(c) { return '<option value="' + c.id + '">' + c.numero_original + ' - ' + c.arcano_es + '</option>'; }).join('');
         }
 
         function selectMazo(mazoNum, element) {
@@ -1263,227 +607,151 @@
             element.classList.add('active');
         }
 
-        // SELECCIÓN DE CARTA (Fase 3)
         function onCardSelect(posicion) {
             var select = document.getElementById('carta-' + posicion);
             var cartaId = parseInt(select.value);
-            
             if (!cartaId) {
                 var existenteIdx = appState.cartasSeleccionadas.findIndex(function(c) { return c.posicion === posicion; });
                 if (existenteIdx > -1) appState.cartasSeleccionadas.splice(existenteIdx, 1);
                 updateSlotVisual(posicion, null);
                 return;
             }
-            
-            var yaSeleccionada = appState.cartasSeleccionadas.some(function(c) { 
-                return c.id === cartaId && c.posicion !== posicion; 
-            });
-            if (yaSeleccionada) { 
-                alert('Esta carta ya fue seleccionada en otra posición'); 
-                select.value = ''; 
-                return; 
-            }
-            
+            var yaSeleccionada = appState.cartasSeleccionadas.some(function(c) { return c.id === cartaId && c.posicion !== posicion; });
+            if (yaSeleccionada) { alert('Esta carta ya fue seleccionada en otra posición'); select.value = ''; return; }
             var carta = cartasData.find(function(c) { return c.id === cartaId; });
             if (!carta) return;
-            
             var existente = appState.cartasSeleccionadas.find(function(c) { return c.posicion === posicion; });
             if (existente) {
                 existente.id = cartaId;
                 existente.numero_original = carta.numero_original;
                 existente.arcano_es = carta.arcano_es;
             } else {
-                appState.cartasSeleccionadas.push({ 
-                    posicion: posicion, 
-                    id: cartaId, 
-                    numero_original: carta.numero_original,
-                    arcano_es: carta.arcano_es,
-                    orientacion: 'R' 
-                });
+                appState.cartasSeleccionadas.push({ posicion: posicion, id: cartaId, numero_original: carta.numero_original, arcano_es: carta.arcano_es, orientacion: 'R' });
             }
-            
             updateSlotVisual(posicion, carta);
         }
 
         function updateSlotVisual(posicion, carta) {
             var containers = document.getElementsByClassName('slot-container');
             if (posicion > containers.length) return;
-            
             var slot = containers[posicion - 1].getElementsByClassName('card-slot')[0];
-            if (carta) { 
-                slot.classList.add('selected'); 
-                slot.innerHTML = '<span style="font-size: 0.9rem; text-align: center; padding: 0.5rem;">' + carta.numero_original + '<br>' + carta.arcano_es + '</span>'; 
-            } else { 
-                slot.classList.remove('selected'); 
-                slot.innerHTML = '<span class="card-placeholder">🂠</span>'; 
+            if (carta) {
+                slot.classList.add('selected');
+                slot.innerHTML = '<span style="font-size: 0.9rem; text-align: center; padding: 0.5rem;">' + carta.numero_original + '<br>' + carta.arcano_es + '</span>';
+            } else {
+                slot.classList.remove('selected');
+                slot.innerHTML = '<span class="card-placeholder">🂠</span>';
             }
         }
 
         function setOrientation(posicion, orientacion, element) {
             var carta = appState.cartasSeleccionadas.find(function(c) { return c.posicion === posicion; });
             if (carta) carta.orientacion = orientacion;
-            
             var toggle = document.getElementsByClassName('slot-container')[posicion - 1].getElementsByClassName('orientation-toggle')[0];
             var btns = toggle.getElementsByClassName('orientation-btn');
             for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
             element.classList.add('active');
         }
 
-        function selectCardSlot(posicion) { 
-            document.getElementById('carta-' + posicion).focus();
-        }
+        function selectCardSlot(posicion) { document.getElementById('carta-' + posicion).focus(); }
+        function toggleExpandible(header) { header.parentElement.classList.toggle('expanded'); }
+        function toggleAutoMode() { alert('Placeholder: Modo automático'); }
+        function explorarCombinaciones() { alert('Placeholder: Explorar combinaciones'); }
+        function searchTiradas() { document.getElementById('search-results').innerHTML = '<div class="empty-state"><p>Búsqueda en desarrollo</p></div>'; }
 
-        function toggleExpandible(header) {
-            header.parentElement.classList.toggle('expanded');
-        }
-
-        function toggleAutoMode() { alert('Placeholder: Modo automático (Fase 4)'); }
-        function explorarCombinaciones() { alert('Placeholder: Explorar combinaciones (Fase 7)'); }
-
-        function searchTiradas() { 
-            document.getElementById('search-results').innerHTML = '<div class="empty-state"><p>Búsqueda en desarrollo (Fase 7)</p></div>'; 
-        }
-
-        // ==================== FASE 3 COMPLETADA - RENDER RESULTADO ====================
-        
-        // REEMPLAZAR la función renderResultado() existente
+        // FASE 3 COMPLETADA - RENDER RESULTADO
         function renderResultado() {
             renderCartasSeleccionadas();
-            renderFichaTecnicaDinamica();      // NUEVO - Parte 2
-            renderInterpretacionesDinamicas(); // NUEVO - Parte 3
-            renderConclusionDinamica();        // NUEVO - Parte 4
+            renderFichaTecnicaDinamica();
+            renderInterpretacionesDinamicas();
+            renderConclusionDinamica();
         }
 
-        // NUEVA FUNCIÓN - Parte 2: Ficha Técnica de cada carta
+        function renderCartasSeleccionadas() {
+            var container = document.getElementById('cartas-seleccionadas-container');
+            if (!container) return;
+            if (!appState.cartasSeleccionadas.length) { container.innerHTML = '<p>No hay cartas seleccionadas</p>'; return; }
+            var html = '<div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">';
+            appState.cartasSeleccionadas.forEach(function(item) {
+                html += '<div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid var(--border);"><div style="font-size: 1.2rem; color: var(--accent); font-weight: bold;">' + item.numero_original + '</div><div style="font-size: 0.9rem;">' + item.arcano_es + '</div><div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">C' + item.posicion + ' | ' + item.orientacion + '</div></div>';
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
         function renderFichaTecnicaDinamica() {
             var container = document.getElementById('ficha-tecnica-dinamica');
-            if (!container || !appState.cartasSeleccionadas.length) {
-                container.innerHTML = '<div class="empty-state">No hay cartas seleccionadas</div>';
-                return;
-            }
-            
+            if (!container) return;
+            if (!appState.cartasSeleccionadas.length) { container.innerHTML = '<div class="empty-state">No hay cartas seleccionadas</div>'; return; }
             var html = '';
             appState.cartasSeleccionadas.forEach(function(item) {
                 var carta = cartasData.find(function(c) { return c.id === item.id; });
                 if (!carta) return;
-                
-                var camposFicha = [
-                    {label: 'Número', value: carta.numero_original},
-                    {label: 'Nombre', value: carta.arcano_es},
-                    {label: 'Tipo', value: carta.tipo},
-                    {label: 'Elemento', value: carta.elemento || '-'},
-                    {label: 'Planeta', value: carta.planeta || '-'},
-                    {label: 'Signo', value: carta.signo || '-'},
-                    {label: 'Color', value: carta.color || '-'},
-                    {label: 'Chakra', value: carta.chakra || '-'}
-                ];
-                
-                html += '<div class="ficha-carta-box">';
-                html += '<h4>' + carta.numero_original + ' - ' + carta.arcano_es + 
-                        ' <span style="color: var(--text-muted); font-size: 0.8rem;">(C' + item.posicion + ' | ' + item.orientacion + ')</span></h4>';
-                html += '<div class="ficha-grid-mini">';
-                
-                camposFicha.forEach(function(campo) {
-                    html += '<div><span style="color: var(--accent);">' + campo.label + ':</span> ' + campo.value + '</div>';
-                });
-                
+                html += '<div class="ficha-carta-box"><h4>' + carta.numero_original + ' - ' + carta.arcano_es + ' <span style="color: var(--text-muted); font-size: 0.8rem;">(C' + item.posicion + ' | ' + item.orientacion + ')</span></h4><div class="ficha-grid-mini">';
+                html += '<div><span style="color: var(--accent);">Tipo:</span> ' + (carta.tipo || '-') + '</div>';
+                html += '<div><span style="color: var(--accent);">Elemento:</span> ' + (carta.elemento || '-') + '</div>';
+                html += '<div><span style="color: var(--accent);">Planeta:</span> ' + (carta.planeta || '-') + '</div>';
+                html += '<div><span style="color: var(--accent);">Signo:</span> ' + (carta.signo || '-') + '</div>';
+                html += '<div><span style="color: var(--accent);">Color:</span> ' + (carta.color || '-') + '</div>';
+                html += '<div><span style="color: var(--accent);">Chakra:</span> ' + (carta.chakra || '-') + '</div>';
                 html += '</div></div>';
             });
-            
             container.innerHTML = html;
         }
 
-        // NUEVA FUNCIÓN - Parte 3: Interpretaciones por Tema
         function renderInterpretacionesDinamicas() {
             var container = document.getElementById('interpretaciones-dinamicas');
             if (!container || !appState.tiradaActual || !appState.cartasSeleccionadas.length) {
                 container.innerHTML = '<div class="empty-state">No hay datos para interpretar</div>';
                 return;
             }
-            
             var tema = appState.tiradaActual.tema || 'gen';
             var temaVisual = TEMAS_FILTRO.find(function(t) { return t.tecnico === tema; });
             var temaNombre = temaVisual ? temaVisual.visual : tema;
-            
             var html = '<div class="tema-badge">Tema: ' + temaNombre + '</div>';
-            
-            // Ordenar cartas por posición
-            var cartasOrdenadas = appState.cartasSeleccionadas.slice().sort(function(a, b) {
-                return a.posicion - b.posicion;
-            });
-            
+            var cartasOrdenadas = appState.cartasSeleccionadas.slice().sort(function(a, b) { return a.posicion - b.posicion; });
             cartasOrdenadas.forEach(function(item) {
                 var carta = cartasData.find(function(c) { return c.id === item.id; });
                 if (!carta) return;
-                
-                // Buscar significado de la posición
-                var posicionData = posicionesData.find(function(p) {
-                    return p.tirada_id === appState.tiradaActual.id && p.posicion === item.posicion;
-                });
-                
+                var posicionData = posicionesData.find(function(p) { return p.tirada_id === appState.tiradaActual.id && p.posicion === item.posicion; });
                 var nombrePosicion = posicionData ? posicionData.nombre : 'Posición ' + item.posicion;
                 var significadoPosicion = posicionData ? posicionData.significado : '';
-                
-                // Construir key de interpretación según tema y orientación
                 var campoInterpretacion = tema + '_' + (item.orientacion === 'I' ? 'inv' : 'recta');
                 var interpretacion = carta[campoInterpretacion] || carta['gen_' + (item.orientacion === 'I' ? 'inv' : 'recta')] || 'Sin interpretación disponible';
-                
-                // Color según tema
                 var colorClass = 'tema-' + tema;
-                
                 html += '<div class="interpretacion-item ' + colorClass + '" style="background: rgba(255,255,255,0.03); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; border-left: 3px solid var(--accent);">';
                 html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">';
                 html += '<span style="color: var(--accent); font-weight: bold;">' + nombrePosicion + '</span>';
-                html += '<span style="font-size: 0.8rem; color: var(--text-muted);">' + 
-                        carta.numero_original + ' | ' + (item.orientacion === 'R' ? 'Recta' : 'Invertida') + '</span>';
+                html += '<span style="font-size: 0.8rem; color: var(--text-muted);">' + carta.numero_original + ' | ' + (item.orientacion === 'R' ? 'Recta' : 'Invertida') + '</span>';
                 html += '</div>';
-                if (significadoPosicion) {
-                    html += '<div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; font-style: italic;">' + significadoPosicion + '</div>';
-                }
+                if (significadoPosicion) html += '<div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; font-style: italic;">' + significadoPosicion + '</div>';
                 html += '<div style="line-height: 1.5; color: var(--text);">' + interpretacion + '</div>';
                 html += '</div>';
             });
-            
             container.innerHTML = html;
         }
 
-        // NUEVA FUNCIÓN - Parte 4: Conclusión Final
         function renderConclusionDinamica() {
             var container = document.getElementById('conclusion-dinamica');
             if (!container || !appState.cartasSeleccionadas.length) {
                 container.innerHTML = '<div class="empty-state">No hay datos para la conclusión</div>';
                 return;
             }
-            
-            // Análisis de la tirada
-            var mayores = 0, menores = 0;
-            var rectas = 0, invertidas = 0;
-            var elementos = {};
-            
+            var mayores = 0, menores = 0, rectas = 0, invertidas = 0, elementos = {};
             appState.cartasSeleccionadas.forEach(function(item) {
                 var carta = cartasData.find(function(c) { return c.id === item.id; });
                 if (!carta) return;
-                
                 if (carta.tipo === 'mayor') mayores++; else menores++;
                 if (item.orientacion === 'R') rectas++; else invertidas++;
-                
                 var elem = carta.elemento || 'Desconocido';
                 elementos[elem] = (elementos[elem] || 0) + 1;
             });
-            
-            var html = '';
-            
-            // Resumen estadístico
-            html += '<div class="conclusion-box">';
-            html += '<h4 style="color: var(--accent); margin-bottom: 0.8rem;">Resumen de la Tirada</h4>';
-            html += '<div class="stats-grid">';
+            var html = '<div class="conclusion-box"><h4 style="color: var(--accent); margin-bottom: 0.8rem;">Resumen de la Tirada</h4><div class="stats-grid">';
             html += '<div><strong>Arcanos Mayores:</strong> ' + mayores + '</div>';
             html += '<div><strong>Arcanos Menores:</strong> ' + menores + '</div>';
             html += '<div><strong>Cartas Rectas:</strong> ' + rectas + '</div>';
             html += '<div><strong>Cartas Invertidas:</strong> ' + invertidas + '</div>';
             html += '</div>';
-            
-            // Elementos predominantes
             var elemSorted = Object.entries(elementos).sort(function(a, b) { return b[1] - a[1]; });
             if (elemSorted.length > 0) {
                 html += '<div style="margin-top: 0.8rem;"><strong>Elementos presentes:</strong> ';
@@ -1491,8 +759,6 @@
                 html += '</div>';
             }
             html += '</div>';
-            
-            // Mensaje según el tema
             var tema = appState.tiradaActual ? appState.tiradaActual.tema : 'gen';
             var mensajes = {
                 'amor': 'Esta tirada revela las energías presentes en tu vida amorosa. Las cartas invertidas pueden indicar bloqueos emocionales o patrones a sanar.',
@@ -1502,40 +768,12 @@
                 'gen': 'Esta tirada ofrece una visión general de las energías que te rodean. Integra estos mensajes para tu mayor bien.',
                 'rel_auto': 'Las cartas revelan patrones en tus relaciones y tu relación contigo mismo. Reflexiona sobre el equilibrio entre dar y recibir.'
             };
-            
-            html += '<div class="conclusion-highlight">';
-            html += '<p style="margin: 0; font-style: italic;">' + (mensajes[tema] || mensajes['gen']) + '</p>';
-            html += '</div>';
-            
+            html += '<div class="conclusion-highlight"><p style="margin: 0; font-style: italic;">' + (mensajes[tema] || mensajes['gen']) + '</p></div>';
             container.innerHTML = html;
         }
 
-        // Función original renderCartasSeleccionadas (Parte 1)
-        function renderCartasSeleccionadas() {
-            var container = document.getElementById('cartas-seleccionadas-container');
-            if (!container) return;
-            
-            if (!appState.cartasSeleccionadas.length) {
-                container.innerHTML = '<p>No hay cartas seleccionadas</p>';
-                return;
-            }
-            
-            var html = '<div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">';
-            appState.cartasSeleccionadas.forEach(function(item) {
-                html += 
-                    '<div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid var(--border);">' +
-                        '<div style="font-size: 1.2rem; color: var(--accent); font-weight: bold;">' + item.numero_original + '</div>' +
-                        '<div style="font-size: 0.9rem;">' + item.arcano_es + '</div>' +
-                        '<div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">C' + item.posicion + ' | ' + item.orientacion + '</div>' +
-                    '</div>';
-            });
-            html += '</div>';
-            container.innerHTML = html;
-        }
-
-        // INICIALIZACIÓN
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🌙 Tarot App - Fase 3 Completada: Iniciando...');
+            console.log('Tarot App - Fase 3 Completada: Iniciando...');
             initApp();
         });
     </script>
