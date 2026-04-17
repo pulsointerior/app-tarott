@@ -5,1292 +5,154 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tarot App</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --primary: #1a1a2e;
-            --secondary: #16213e;
-            --accent: #e94560;
-            --text: #f5f5f5;
-            --text-muted: #a0a0a0;
-            --border: #2d3a4f;
-            --color-amor: #ff6b9d;
-            --color-trabajo: #4ecdc4;
-            --color-dinero: #ffe66d;
-            --color-salud: #95e1d3;
-            --color-general: #a8d8ea;
-            --color-rel-auto: #c9a0dc;
-            --color-decisiones: #ffa07a;
-            --color-energia: #98fb98;
-            --color-espiritualidad: #dda0dd;
-            --color-familia: #f0e68c;
-            --color-preguntas: #87ceeb;
-            --color-proyectos: #ffb6c1;
-            --color-viajes: #20b2aa;
-            --color-positiva: #4ecdc4;
-            --color-neutra: #a8d8ea;
-            --color-desafiante: #e94560;
+            --primary: #1a1a2e; --secondary: #16213e; --accent: #e94560;
+            --text: #f5f5f5; --text-muted: #a0a0a0; --border: #2d3a4f;
+            --color-amor: #ff6b9d; --color-trabajo: #4ecdc4; --color-dinero: #ffe66d;
+            --color-salud: #95e1d3; --color-general: #a8d8ea; --color-rel-auto: #c9a0dc;
+            --color-positiva: #4ecdc4; --color-neutra: #a8d8ea; --color-desafiante: #e94560;
         }
-
         body {
             font-family: 'Georgia', serif;
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: var(--text);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* ==================== ANIMACIONES ==================== */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInLeft {
-            from { opacity: 0; transform: translateX(-30px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes fadeInRight {
-            from { opacity: 0; transform: translateX(30px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 5px rgba(233, 69, 96, 0.5); }
-            50% { box-shadow: 0 0 20px rgba(233, 69, 96, 0.8), 0 0 30px rgba(233, 69, 96, 0.4); }
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        @keyframes rotateIn {
-            from { transform: rotateY(90deg); opacity: 0; }
-            to { transform: rotateY(0); opacity: 1; }
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); max-height: 0; }
-            to { opacity: 1; transform: translateY(0); max-height: 500px; }
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .screen {
-            display: none;
-            min-height: 100vh;
-            padding: 2rem;
-        }
-
-        .screen.active {
-            display: block;
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        .animate-stagger > * {
-            opacity: 0;
-            animation: fadeInUp 0.5s ease forwards;
-        }
-
-        .animate-stagger > *:nth-child(1) { animation-delay: 0.1s; }
-        .animate-stagger > *:nth-child(2) { animation-delay: 0.2s; }
-        .animate-stagger > *:nth-child(3) { animation-delay: 0.3s; }
-        .animate-stagger > *:nth-child(4) { animation-delay: 0.4s; }
-        .animate-stagger > *:nth-child(5) { animation-delay: 0.5s; }
-        .animate-stagger > *:nth-child(6) { animation-delay: 0.6s; }
-
-        .btn {
-            display: inline-block;
-            padding: 1rem 2rem;
-            background: var(--accent);
-            color: var(--text);
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-family: 'Georgia', serif;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.4);
-            animation: glow 2s infinite;
-        }
-
-        .btn:active {
-            transform: translateY(-1px);
-        }
-
-        .btn-modo {
-            background: transparent;
-            border: 2px solid var(--accent);
-            color: var(--text);
-        }
-
-        .btn-modo.active {
-            background: var(--accent);
-            color: var(--text);
-            animation: pulse 2s infinite;
-        }
-
-        .btn-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .nav-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            background: rgba(0,0,0,0.2);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            margin: -2rem -2rem 2rem -2rem;
-            animation: fadeInLeft 0.5s ease;
-        }
-
-        .nav-back {
-            cursor: pointer;
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .nav-back:hover {
-            color: var(--text);
-            transform: translateX(-5px);
-        }
-
-        .card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            animation: fadeInUp 0.6s ease;
-        }
-
-        .card:hover {
-            border-color: var(--accent);
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .card-slot {
-            width: 120px;
-            height: 200px;
-            background: linear-gradient(145deg, #1e2a3a, #2d3a4f);
-            border: 2px dashed var(--border);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card-slot::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(233,69,96,0.1) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .card-slot:hover::before {
-            opacity: 1;
-        }
-
-        .card-slot:hover {
-            border-color: var(--accent);
-            transform: translateY(-5px) rotateY(5deg);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-        }
-
-        .card-slot.selected {
-            border-color: var(--accent);
-            border-style: solid;
-            animation: glow 2s infinite, float 3s ease-in-out infinite;
-        }
-
-        .card-placeholder {
-            font-size: 4rem;
-            opacity: 0.3;
-            animation: float 4s ease-in-out infinite;
-        }
-
-        .execution-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            justify-content: center;
-            margin: 2rem 0;
-        }
-
-        .slot-container {
-            text-align: center;
-            animation: fadeInUp 0.5s ease;
-        }
-
-        .slot-container:nth-child(1) { animation-delay: 0.1s; }
-        .slot-container:nth-child(2) { animation-delay: 0.2s; }
-        .slot-container:nth-child(3) { animation-delay: 0.3s; }
-        .slot-container:nth-child(4) { animation-delay: 0.4s; }
-        .slot-container:nth-child(5) { animation-delay: 0.5s; }
-
-        .slot-label {
-            margin-top: 0.5rem;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
-
-        .filter-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 0.5rem;
-            margin: 1rem 0;
-        }
-
-        .filter-btn {
-            padding: 0.8rem 1rem;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            color: var(--text);
-            cursor: pointer;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            font-family: 'Georgia', serif;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .filter-btn::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: width 0.3s;
-        }
-
-        .filter-btn:hover::after,
-        .filter-btn.active::after {
-            width: 100%;
-        }
-
-        .filter-btn:hover, .filter-btn.active {
-            background: var(--accent);
-            border-color: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(233, 69, 96, 0.3);
-        }
-
-        /* SELECT MEJORADO CON ANIMACIONES Y TOOLTIP */
-        .select-container {
-            position: relative;
-            width: 100%;
-        }
-
-        select {
-            width: 100%;
-            padding: 0.8rem 2.5rem 0.8rem 0.8rem;
-            background: rgba(26, 26, 46, 0.9);
-            border: 1px solid var(--border);
-            color: var(--text);
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-family: 'Georgia', serif;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23e94560' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 0.8rem center;
-            animation: fadeInUp 0.3s ease;
-        }
-
-        select:hover {
-            border-color: var(--accent);
-            background: rgba(233, 69, 96, 0.1);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(233, 69, 96, 0.2);
-        }
-
-        select:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.3);
-            animation: glow 1.5s infinite;
-        }
-
-        select option {
-            background: var(--primary);
-            color: var(--text);
-            padding: 0.5rem;
-        }
-
-        .select-tooltip {
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%) translateY(-5px);
-            background: var(--accent);
-            color: var(--text);
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s ease;
-            z-index: 10;
-            animation: fadeInUp 0.3s ease;
-        }
-
-        .select-tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 5px solid transparent;
-            border-top-color: var(--accent);
-        }
-
-        .select-container:hover .select-tooltip {
-            opacity: 1;
-            transform: translateX(-50%) translateY(-10px);
-        }
-
-        .orientation-toggle {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-            justify-content: center;
-        }
-
-        .orientation-btn {
-            padding: 0.5rem 1rem;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            color: var(--text);
-            cursor: pointer;
-            border-radius: 4px;
-            font-family: 'Georgia', serif;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .orientation-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: var(--accent);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: all 0.3s ease;
-            z-index: -1;
-        }
-
-        .orientation-btn:hover::before,
-        .orientation-btn.active::before {
-            width: 150%;
-            height: 150%;
-        }
-
-        .orientation-btn:hover, .orientation-btn.active {
-            border-color: var(--accent);
-            color: var(--text);
-            transform: scale(1.1);
-        }
-
-        /* ==================== FASE 2 — CSS RESULTADO ==================== */
-        .result-part {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            transition: all 0.4s ease;
-            animation: fadeInUp 0.6s ease;
-        }
-
-        .result-part:hover {
-            border-color: var(--accent);
-            transform: translateX(5px);
-            box-shadow: -5px 0 20px rgba(233, 69, 96, 0.2);
-        }
-
-        .result-part h3 {
-            color: var(--accent);
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 1.1rem;
-            position: relative;
-            display: inline-block;
-        }
-
-        .result-part h3::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: width 0.3s;
-        }
-
-        .result-part:hover h3::after {
-            width: 100%;
-        }
-
-        .expandible {
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .expandible:hover {
-            border-color: var(--accent);
-        }
-
-        .expandible-header {
-            background: rgba(255,255,255,0.05);
-            padding: 1rem;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-
-        .expandible-header:hover {
-            background: rgba(255,255,255,0.08);
-            padding-left: 1.5rem;
-        }
-
-        .expandible-header::after {
-            content: '▼';
-            font-size: 0.8rem;
-            transition: transform 0.3s ease;
-        }
-
-        .expandible.expanded .expandible-header::after {
-            transform: rotate(180deg);
-        }
-
-        .expandible-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease, padding 0.3s ease;
-            padding: 0 1rem;
-        }
-
-        .expandible.expanded .expandible-content {
-            max-height: 2000px;
-            padding: 1rem;
-        }
-
-        .ficha-tecnica-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-
-        @media (max-width: 768px) {
-            .ficha-tecnica-grid { grid-template-columns: 1fr; }
-        }
-
-        .interpretacion-item {
-            margin-bottom: 0.8rem;
-            padding-bottom: 0.8rem;
-            border-bottom: 1px solid var(--border);
-            animation: fadeInRight 0.5s ease;
-        }
-
+            color: var(--text); min-height: 100vh; overflow-x: hidden;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 5px rgba(233, 69, 96, 0.5); } 50% { box-shadow: 0 0 20px rgba(233, 69, 96, 0.8); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .screen { display: none; min-height: 100vh; padding: 2rem; }
+        .screen.active { display: block; animation: fadeIn 0.6s ease-out; }
+        .btn { display: inline-block; padding: 1rem 2rem; background: var(--accent); color: var(--text); border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; font-family: 'Georgia', serif; }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(233, 69, 96, 0.4); }
+        .btn-modo { background: transparent; border: 2px solid var(--accent); }
+        .btn-modo.active { background: var(--accent); animation: pulse 2s infinite; }
+        .btn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem; }
+        .nav-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background: rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 100; margin: -2rem -2rem 2rem -2rem; }
+        .nav-back { cursor: pointer; font-size: 1.2rem; color: var(--text-muted); }
+        .nav-back:hover { color: var(--text); }
+        .card { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; transition: all 0.4s ease; }
+        .card:hover { border-color: var(--accent); transform: translateY(-8px); }
+        .card-slot { width: 120px; height: 200px; background: linear-gradient(145deg, #1e2a3a, #2d3a4f); border: 2px dashed var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 3rem; cursor: pointer; transition: all 0.4s ease; }
+        .card-slot:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .card-slot.selected { border-color: var(--accent); border-style: solid; animation: glow 2s infinite; }
+        .card-placeholder { font-size: 4rem; opacity: 0.3; animation: float 4s ease-in-out infinite; }
+        .execution-grid { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; margin: 2rem 0; }
+        .slot-container { text-align: center; }
+        .slot-label { margin-top: 0.5rem; color: var(--text-muted); font-size: 0.9rem; font-weight: bold; }
+        .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.5rem; margin: 1rem 0; }
+        .filter-btn { padding: 0.8rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text); cursor: pointer; border-radius: 6px; transition: all 0.3s ease; }
+        .filter-btn:hover, .filter-btn.active { background: var(--accent); border-color: var(--accent); }
+        .select-container { position: relative; width: 100%; }
+        select { width: 100%; padding: 0.8rem 2.5rem 0.8rem 0.8rem; background: rgba(26, 26, 46, 0.95); border: 2px solid var(--accent); color: var(--text); border-radius: 6px; font-size: 0.9rem; font-family: 'Georgia', serif; cursor: pointer; transition: all 0.3s ease; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23e94560' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.8rem center; animation: fadeInUp 0.3s ease; }
+        select:hover { background: rgba(233, 69, 96, 0.15); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(233, 69, 96, 0.3); }
+        select:focus { outline: none; box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.3), 0 0 20px rgba(233, 69, 96, 0.4); }
+        select option { background: var(--primary); color: var(--text); padding: 0.5rem; }
+        .select-tooltip { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(-5px); background: var(--accent); color: var(--text); padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.8rem; white-space: nowrap; opacity: 0; pointer-events: none; transition: all 0.3s ease; z-index: 10; }
+        .select-container:hover .select-tooltip { opacity: 1; transform: translateX(-50%) translateY(-10px); }
+        .orientation-toggle { display: flex; gap: 0.5rem; margin-top: 0.5rem; justify-content: center; }
+        .orientation-btn { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text); cursor: pointer; border-radius: 4px; transition: all 0.3s ease; }
+        .orientation-btn.active { background: var(--accent); border-color: var(--accent); }
+        .result-part { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+        .result-part h3 { color: var(--accent); margin-bottom: 1rem; text-transform: uppercase; }
+        .expandible { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 0.5rem; overflow: hidden; }
+        .expandible-header { background: rgba(255,255,255,0.05); padding: 1rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .expandible-header::after { content: '▼'; font-size: 0.8rem; }
+        .expandible.expanded .expandible-header::after { transform: rotate(180deg); }
+        .expandible-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
+        .expandible.expanded .expandible-content { max-height: 2000px; padding: 1rem; }
+        .ficha-tecnica-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        @media (max-width: 768px) { .ficha-tecnica-grid { grid-template-columns: 1fr; } }
+        .interpretacion-item { margin-bottom: 0.8rem; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border); }
         .interpretacion-item:last-child { border-bottom: none; }
-
-        .interpretacion-item .tema-header {
-            color: var(--accent);
-            font-weight: bold;
-            margin-bottom: 0.3rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .interpretacion-item .tema-header::before {
-            content: '◆';
-            color: var(--accent);
-            font-size: 0.6rem;
-        }
-
-        .interpretacion-item .orientacion-tag {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            font-style: italic;
-            margin-left: 0.5rem;
-        }
-
-        .interpretacion-item .texto-interpretacion {
-            color: var(--text);
-            line-height: 1.5;
-            padding-left: 1rem;
-        }
-
-        /* COLORES DE TEMAS */
-        .tema-amor .tema-header { color: var(--color-amor); }
-        .tema-amor .tema-header::before { color: var(--color-amor); }
-        .tema-trabajo .tema-header { color: var(--color-trabajo); }
-        .tema-trabajo .tema-header::before { color: var(--color-trabajo); }
-        .tema-dinero .tema-header { color: var(--color-dinero); }
-        .tema-dinero .tema-header::before { color: var(--color-dinero); }
-        .tema-salud .tema-header { color: var(--color-salud); }
-        .tema-salud .tema-header::before { color: var(--color-salud); }
-        .tema-gen .tema-header { color: var(--color-general); }
-        .tema-gen .tema-header::before { color: var(--color-general); }
-        .tema-rel_auto .tema-header { color: var(--color-rel-auto); }
-        .tema-rel_auto .tema-header::before { color: var(--color-rel-auto); }
-        .tema-decisiones_elecciones .tema-header { color: var(--color-decisiones); }
-        .tema-decisiones_elecciones .tema-header::before { color: var(--color-decisiones); }
-        .tema-energia_dia .tema-header { color: var(--color-energia); }
-        .tema-energia_dia .tema-header::before { color: var(--color-energia); }
-        .tema-espiritualidad_crecimiento .tema-header { color: var(--color-espiritualidad); }
-        .tema-espiritualidad_crecimiento .tema-header::before { color: var(--color-espiritualidad); }
-        .tema-familia_hogar .tema-header { color: var(--color-familia); }
-        .tema-familia_hogar .tema-header::before { color: var(--color-familia); }
-        .tema-preguntas_si_no .tema-header { color: var(--color-preguntas); }
-        .tema-preguntas_si_no .tema-header::before { color: var(--color-preguntas); }
-        .tema-proyectos_creatividad .tema-header { color: var(--color-proyectos); }
-        .tema-proyectos_creatividad .tema-header::before { color: var(--color-proyectos); }
-        .tema-viajes_mudanzas .tema-header { color: var(--color-viajes); }
-        .tema-viajes_mudanzas .tema-header::before { color: var(--color-viajes); }
-        .tema-linea_tiempo .tema-header { color: var(--accent); }
-        .tema-linea_tiempo .tema-header::before { color: var(--accent); }
-
-        /* ==================== CONCLUSIÓN FINAL ==================== */
-        .conclusion-box {
-            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            border-left: 4px solid var(--accent);
-            animation: fadeInUp 0.6s ease;
-        }
-
-        .conclusion-tipo {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 1rem;
-            animation: pulse 2s infinite;
-        }
-
-        .conclusion-tipo.positiva {
-            background: rgba(78, 205, 196, 0.2);
-            color: var(--color-positiva);
-            border: 1px solid var(--color-positiva);
-        }
-
-        .conclusion-tipo.neutra {
-            background: rgba(168, 216, 234, 0.2);
-            color: var(--color-neutra);
-            border: 1px solid var(--color-neutra);
-        }
-
-        .conclusion-tipo.desafiante {
-            background: rgba(233, 69, 96, 0.2);
-            color: var(--color-desafiante);
-            border: 1px solid var(--color-desafiante);
-        }
-
-        .conclusion-seccion {
-            margin-bottom: 1.2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .conclusion-seccion:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-        }
-
-        .conclusion-label {
-            color: var(--accent);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.3rem;
-            font-weight: bold;
-        }
-
-        .conclusion-texto {
-            color: var(--text);
-            line-height: 1.6;
-            font-size: 1rem;
-        }
-
-        .conclusion-tendencia {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.3rem 0.8rem;
-            background: rgba(255,255,255,0.05);
-            border-radius: 15px;
-            font-size: 0.9rem;
-        }
-
-        .tendencia-indicator {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
+        .interpretacion-item .tema-header { color: var(--accent); font-weight: bold; margin-bottom: 0.3rem; }
+        .interpretacion-item .orientacion-tag { font-size: 0.8rem; color: var(--text-muted); font-style: italic; margin-left: 0.5rem; }
+        .interpretacion-item .texto-interpretacion { color: var(--text); line-height: 1.5; padding-left: 1rem; }
+        .conclusion-box { background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; border-left: 4px solid var(--accent); }
+        .conclusion-tipo { display: inline-block; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
+        .conclusion-tipo.positiva { background: rgba(78, 205, 196, 0.2); color: var(--color-positiva); border: 1px solid var(--color-positiva); }
+        .conclusion-tipo.neutra { background: rgba(168, 216, 234, 0.2); color: var(--color-neutra); border: 1px solid var(--color-neutra); }
+        .conclusion-tipo.desafiante { background: rgba(233, 69, 96, 0.2); color: var(--color-desafiante); border: 1px solid var(--color-desafiante); }
+        .conclusion-seccion { margin-bottom: 1.2rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .conclusion-seccion:last-child { border-bottom: none; margin-bottom: 0; }
+        .conclusion-label { color: var(--accent); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.3rem; font-weight: bold; }
+        .conclusion-texto { color: var(--text); line-height: 1.6; font-size: 1rem; }
+        .conclusion-tendencia { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.3rem 0.8rem; background: rgba(255,255,255,0.05); border-radius: 15px; font-size: 0.9rem; }
+        .tendencia-indicator { width: 10px; height: 10px; border-radius: 50%; animation: pulse 2s infinite; }
         .tendencia-positivo { background: var(--color-positiva); }
         .tendencia-reto { background: var(--color-desafiante); }
         .tendencia-transicion { background: var(--color-neutra); }
-
-        /* ==================== FIN FASE 2 ==================== */
-
-        .empty-state {
-            text-align: center;
-            color: var(--text-muted);
-            padding: 2rem;
-            font-style: italic;
-            animation: fadeIn 0.5s ease;
-        }
-
-        #homepage {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            min-height: 100vh;
-        }
-
-        #homepage.active {
-            display: flex;
-            animation: fadeIn 1s ease;
-        }
-
-        #homepage h1 {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--accent), #ff6b6b, #ffd93d);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shimmer 3s infinite;
-        }
-
-        #homepage p {
-            font-size: 1.3rem;
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-            max-width: 500px;
-            animation: fadeInUp 0.8s ease 0.3s both;
-        }
-
-        #homepage .btn {
-            animation: fadeInUp 0.8s ease 0.5s both, float 3s ease-in-out infinite 1s;
-        }
-
-        .mazo-grid {
-            display: flex;
-            gap: 2rem;
-            justify-content: center;
-            margin: 2rem 0;
-            flex-wrap: wrap;
-        }
-
-        .mazo-card {
-            width: 150px;
-            height: 200px;
-            background: linear-gradient(145deg, #1e2a3a, #2d3a4f);
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-            animation: fadeInUp 0.5s ease;
-        }
-
-        .mazo-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.5s;
-        }
-
-        .mazo-card:hover::before {
-            left: 100%;
-        }
-
-        .mazo-card:hover, .mazo-card.selected {
-            border-color: var(--accent);
-            transform: scale(1.08) rotateY(5deg);
-            box-shadow: 0 20px 40px rgba(233, 69, 96, 0.3);
-        }
-
-        .mazo-card.selected {
-            animation: glow 2s infinite;
-        }
-
-        .tirada-item {
-            display: grid;
-            grid-template-columns: 50px 1fr auto;
-            gap: 1rem;
-            align-items: center;
-            padding: 1rem;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            animation: fadeInRight 0.5s ease;
-        }
-
-        .tirada-item:hover {
-            border-color: var(--accent);
-            background: rgba(233, 69, 96, 0.1);
-            transform: translateX(10px);
-            box-shadow: -5px 0 20px rgba(233, 69, 96, 0.2);
-        }
-
-        .tirada-number {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--accent);
-            animation: pulse 2s infinite;
-        }
-
-        .tirada-info h4 {
-            margin-bottom: 0.3rem;
-            transition: color 0.3s;
-        }
-
-        .tirada-item:hover .tirada-info h4 {
-            color: var(--accent);
-        }
-
-        .tirada-meta {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        .tirada-badge {
-            background: var(--accent);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            transition: all 0.3s ease;
-        }
-
-        .tirada-item:hover .tirada-badge {
-            transform: scale(1.1);
-            box-shadow: 0 5px 15px rgba(233, 69, 96, 0.4);
-        }
-
-        .search-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-
-        .search-input {
-            padding: 0.8rem;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            color: var(--text);
-            border-radius: 6px;
-            font-family: 'Georgia', serif;
-            transition: all 0.3s ease;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .arcanos-section {
-            margin-bottom: 2rem;
-            animation: fadeInUp 0.6s ease;
-        }
-
-        .arcanos-section-title {
-            font-size: 1.5rem;
-            color: var(--accent);
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--border);
-            position: relative;
-        }
-
-        .arcanos-section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 50px;
-            height: 2px;
-            background: var(--accent);
-            transition: width 0.3s;
-        }
-
-        .arcanos-section:hover .arcanos-section-title::after {
-            width: 100px;
-        }
-
-        .arcanos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-            gap: 0.8rem;
-        }
-
-        .arcano-thumb {
-            aspect-ratio: 2/3;
-            background: linear-gradient(145deg, #1e2a3a, #2d3a4f);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            font-size: 0.9rem;
-            text-align: center;
-            padding: 0.3rem;
-            min-height: 100px;
-            position: relative;
-            overflow: hidden;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .arcano-thumb::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, rgba(233,69,96,0.3) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .arcano-thumb:hover::before {
-            opacity: 1;
-        }
-
-        .arcano-thumb:hover {
-            border-color: var(--accent);
-            transform: translateY(-8px) scale(1.1);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-            z-index: 10;
-        }
-
-        .arcano-thumb.mayor {
-            background: linear-gradient(145deg, #2d3a4f, #3d4a5f);
-        }
-
-        .arcano-thumb.copas {
-            background: linear-gradient(145deg, #3a4a31, #4a6741);
-            border-color: #4a6741;
-        }
-
-        .arcano-thumb.deniers {
-            background: linear-gradient(145deg, #6b5914, #8b6914);
-            border-color: #8b6914;
-        }
-
-        .arcano-thumb.epees {
-            background: linear-gradient(145deg, #3a4556, #4a5568);
-            border-color: #4a5568;
-        }
-
-        .arcano-thumb.batons {
-            background: linear-gradient(145deg, #6b3513, #8b4513);
-            border-color: #8b4513;
-        }
-
-        @media (max-width: 768px) {
-            .screen { padding: 1rem; }
-            #homepage h1 { font-size: 2.5rem; }
-            .mazo-grid { flex-direction: column; align-items: center; }
-            .execution-grid { flex-direction: column; align-items: center; }
-            .nav-header { margin: -1rem -1rem 2rem -1rem; }
-            .arcanos-grid { grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); }
-            .ficha-tecnica-grid { grid-template-columns: 1fr; }
-        }
-
-        .ficha-item {
-            margin-bottom: 0.8rem;
-            line-height: 1.4;
-            padding: 0.5rem;
-            background: rgba(255,255,255,0.02);
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .ficha-item:hover {
-            background: rgba(255,255,255,0.05);
-            transform: translateX(5px);
-        }
-
-        .ficha-label {
-            color: var(--accent);
-            font-weight: bold;
-            display: inline;
-        }
-
-        .ficha-value {
-            color: var(--text);
-            display: inline;
-        }
-
-        .tema-nombre {
-            color: var(--accent);
-            font-weight: bold;
-            margin-bottom: 0.3rem;
-        }
-
-        .orientacion-tag {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            font-style: italic;
-        }
-
-        .arcano-display {
-            font-size: 1.5rem;
-            color: var(--accent);
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(233, 69, 96, 0.5);
-            animation: fadeInUp 0.5s ease;
-        }
-
-        /* Loading overlay Fase 3 */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--primary);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid var(--border);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            position: relative;
-        }
-
-        .loading-spinner::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            border-radius: 50%;
-            border: 2px solid transparent;
-            border-top-color: rgba(233, 69, 96, 0.3);
-            animation: spin 2s linear infinite reverse;
-        }
-
-        .loading-text {
-            margin-top: 1.5rem;
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            animation: pulse 2s infinite;
-        }
-
-        .error-message {
-            color: var(--accent);
-            text-align: center;
-            padding: 2rem;
-            animation: fadeIn 0.5s ease;
-        }
-
-        /* Nuevos estilos para ficha de arcano */
-        .campo-visible {
-            background: rgba(255,255,255,0.03);
-            border-left: 3px solid var(--accent);
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border-radius: 0 8px 8px 0;
-            transition: all 0.3s ease;
-            animation: fadeInRight 0.5s ease;
-        }
-
-        .campo-visible:hover {
-            background: rgba(255,255,255,0.05);
-            transform: translateX(5px);
-            border-left-width: 5px;
-        }
-
-        .campo-titulo {
-            color: var(--accent);
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .orientacion-par {
-            margin-bottom: 0.5rem;
-            padding: 0.5rem;
-            background: rgba(255,255,255,0.02);
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .orientacion-par:hover {
-            background: rgba(255,255,255,0.05);
-        }
-
-        .orientacion-label {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            font-weight: bold;
-            margin-bottom: 0.2rem;
-        }
-
-        .linea-tiempo-bloque {
-            margin-bottom: 1rem;
-            padding: 1rem;
-            background: rgba(255,255,255,0.02);
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
-        }
-
-        .linea-tiempo-bloque:hover {
-            border-color: var(--accent);
-            transform: translateY(-3px);
-        }
-
-        .linea-tiempo-titulo {
-            color: var(--accent);
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
-        }
-
-        .posicion-detalle {
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            background: rgba(255,255,255,0.03);
-            border-radius: 8px;
-            border-left: 3px solid var(--accent);
-            transition: all 0.3s ease;
-            animation: fadeInUp 0.5s ease;
-        }
-
-        .posicion-detalle:hover {
-            background: rgba(255,255,255,0.05);
-            transform: translateX(5px);
-        }
-
-        .posicion-numero {
-            color: var(--accent);
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .posicion-nombre {
-            color: var(--text);
-            font-weight: bold;
-            margin-bottom: 0.3rem;
-        }
-
-        .posicion-significado {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-            font-style: italic;
-        }
-
-        .posicion-paso {
-            color: var(--text);
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        /* Patrones detectados */
-        .patrones-box {
-            background: rgba(255,255,255,0.03);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border: 1px solid var(--border);
-        }
-
-        .patron-item {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin: 0.3rem;
-            padding: 0.3rem 0.8rem;
-            background: rgba(255,255,255,0.05);
-            border-radius: 15px;
-            font-size: 0.85rem;
-        }
-
-        .patron-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-        }
+        .empty-state { text-align: center; color: var(--text-muted); padding: 2rem; font-style: italic; }
+        #homepage { display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 100vh; }
+        #homepage.active { display: flex; }
+        #homepage h1 { font-size: 4rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--accent), #ff6b6b, #ffd93d); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        #homepage p { font-size: 1.3rem; color: var(--text-muted); margin-bottom: 2rem; max-width: 500px; }
+        .mazo-grid { display: flex; gap: 2rem; justify-content: center; margin: 2rem 0; flex-wrap: wrap; }
+        .mazo-card { width: 150px; height: 200px; background: linear-gradient(145deg, #1e2a3a, #2d3a4f); border: 2px solid var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.4s ease; }
+        .mazo-card:hover, .mazo-card.selected { border-color: var(--accent); transform: scale(1.08); box-shadow: 0 20px 40px rgba(233, 69, 96, 0.3); }
+        .tirada-item { display: grid; grid-template-columns: 50px 1fr auto; gap: 1rem; align-items: center; padding: 1rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s ease; }
+        .tirada-item:hover { border-color: var(--accent); background: rgba(233, 69, 96, 0.1); transform: translateX(10px); }
+        .tirada-number { font-size: 1.5rem; font-weight: bold; color: var(--accent); }
+        .tirada-badge { background: var(--accent); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; }
+        .arcanos-section { margin-bottom: 2rem; }
+        .arcanos-section-title { font-size: 1.5rem; color: var(--accent); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border); }
+        .arcanos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 0.8rem; }
+        .arcano-thumb { aspect-ratio: 2/3; background: linear-gradient(145deg, #1e2a3a, #2d3a4f); border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.9rem; text-align: center; padding: 0.3rem; min-height: 100px; }
+        .arcano-thumb:hover { border-color: var(--accent); transform: translateY(-8px) scale(1.1); }
+        .arcano-thumb.mayor { background: linear-gradient(145deg, #2d3a4f, #3d4a5f); }
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; }
+        .loading-spinner { width: 60px; height: 60px; border: 4px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+        .loading-text { margin-top: 1.5rem; color: var(--text-muted); font-size: 1.1rem; }
+        .campo-visible { background: rgba(255,255,255,0.03); border-left: 3px solid var(--accent); padding: 1rem; margin-bottom: 1rem; border-radius: 0 8px 8px 0; }
+        .campo-titulo { color: var(--accent); font-weight: bold; margin-bottom: 0.5rem; font-size: 0.9rem; text-transform: uppercase; }
+        .orientacion-par { margin-bottom: 0.5rem; padding: 0.5rem; background: rgba(255,255,255,0.02); border-radius: 4px; }
+        .orientacion-label { font-size: 0.8rem; color: var(--text-muted); font-weight: bold; }
+        .posicion-detalle { margin-bottom: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 3px solid var(--accent); }
+        .posicion-numero { color: var(--accent); font-weight: bold; font-size: 1.1rem; }
+        .posicion-nombre { color: var(--text); font-weight: bold; }
+        .posicion-significado { color: var(--text-muted); font-size: 0.9rem; font-style: italic; }
     </style>
+<base target="_blank">
 </head>
 <body>
-
-    <!-- LOADING OVERLAY FASE 3 -->
     <div id="loading-overlay" class="loading-overlay">
         <div class="loading-spinner"></div>
         <div class="loading-text" id="loading-text">Cargando datos del tarot...</div>
     </div>
 
-    <!-- PANTALLA 1: HOMEPAGE -->
     <section id="homepage" class="screen active">
         <h1>🌙 Tarot Místico</h1>
         <p>Descubre los secretos del tarot a través de lecturas guiadas y exploración de arcanos</p>
         <button class="btn" onclick="navigateTo('introduccion')" id="btn-entrar" disabled>[ ENTRAR ]</button>
     </section>
 
-    <!-- PANTALLA 2: INTRODUCCIÓN -->
     <section id="introduccion" class="screen">
         <div class="nav-header">
             <span class="nav-back" onclick="navigateTo('homepage')">← Volver</span>
             <span>Configuración</span>
         </div>
-
         <h2 style="text-align: center;">Selecciona tu Mazo</h2>
         <div class="mazo-grid" id="mazo-container">
             <div class="mazo-card" data-mazo="1" onclick="selectMazo(1, this)"><span>Mazo 1</span></div>
             <div class="mazo-card" data-mazo="2" onclick="selectMazo(2, this)"><span>Mazo 2</span></div>
             <div class="mazo-card" data-mazo="3" onclick="selectMazo(3, this)"><span>Mazo 3</span></div>
         </div>
-
         <h2 style="text-align: center; margin-top: 2rem;">Modo de Lectura</h2>
-        <div class="btn-grid modo-container" id="modo-container" style="max-width: 600px; margin: 2rem auto;">
+        <div class="btn-grid modo-container" style="max-width: 600px; margin: 2rem auto;">
             <button class="btn btn-modo" data-modo="automatico" onclick="seleccionarModoYContinuar('automatico', this)">TIRADA AUTOMÁTICA</button>
             <button class="btn btn-modo" data-modo="manual" onclick="seleccionarModoYContinuar('manual', this)">MODO MANUAL</button>
         </div>
     </section>
 
-    <!-- PANTALLA 3: MENÚ PRINCIPAL -->
     <section id="menu-principal" class="screen">
         <div class="nav-header">
             <span class="nav-back" onclick="navigateTo('introduccion')">← Volver</span>
             <span>Menú Principal</span>
         </div>
-
         <h1 style="text-align: center; margin-bottom: 2rem;">Menú Principal</h1>
-
         <div class="btn-grid" style="max-width: 600px; margin: 0 auto;">
             <button class="btn" onclick="navigateTo('explorar-tiradas')">EXPLORAR TIRADAS</button>
             <button class="btn" onclick="navigateTo('arcanos')">LOS ARCANOS</button>
@@ -1298,49 +160,38 @@
         </div>
     </section>
 
-    <!-- PANTALLA 4: EXPLORAR TIRADAS -->
     <section id="explorar-tiradas" class="screen">
         <div class="nav-header">
             <span class="nav-back" onclick="navigateTo('menu-principal')">← Volver</span>
             <span>Explorar por Tema</span>
         </div>
-
         <h2 style="text-align: center; margin-bottom: 0.5rem;">Filtrar por Tema</h2>
         <p id="modo-actual-display" style="text-align: center; color: var(--accent); margin-bottom: 1rem; font-size: 0.9rem;">
             Modo: <span id="modo-texto">-</span>
         </p>
-
         <div class="filter-grid" id="temas-filter-grid"></div>
-
         <div style="text-align: center; margin-top: 2rem;">
             <button class="btn" onclick="verTiradasFiltradas()">Ver Tiradas →</button>
         </div>
     </section>
 
-    <!-- PANTALLA 5: LISTADO DE TIRADAS -->
     <section id="listado-tiradas" class="screen">
         <div class="nav-header">
             <span class="nav-back" onclick="navigateTo('explorar-tiradas')">← Volver</span>
             <span>Listado de Tiradas</span>
         </div>
-
         <h2 style="margin-bottom: 0.5rem;">Tiradas Disponibles</h2>
         <p id="listado-modo-info" style="color: var(--accent); margin-bottom: 1rem; font-size: 0.9rem;">
             Modo: <span id="listado-modo-texto">-</span> | Tema: <span id="listado-tema-texto">-</span>
         </p>
-
-        <div id="tiradas-lista">
-            <div class="empty-state"><p>No hay tiradas cargadas</p></div>
-        </div>
+        <div id="tiradas-lista"><div class="empty-state"><p>No hay tiradas cargadas</p></div></div>
     </section>
 
-    <!-- PANTALLA 6: DETALLE DE TIRADA -->
     <section id="detalle-tirada" class="screen">
         <div class="nav-header">
             <span class="nav-back" onclick="navigateTo('listado-tiradas')">← Volver</span>
             <span>Detalle de Tirada</span>
         </div>
-
         <div class="card">
             <h2 id="detalle-nombre_tirada">[ nombre_tirada ]</h2>
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1rem 0;">
@@ -1350,57 +201,43 @@
             <div style="margin: 1rem 0;"><strong>Intención:</strong><p id="detalle-intencion" style="color: var(--text-muted);">[ intencion ]</p></div>
             <div style="margin: 1rem 0;"><strong>Tiempo de Validez:</strong><p id="detalle-tiempo_validez" style="color: var(--text-muted);">[ tiempo_validez ]</p></div>
             <div style="margin: 1rem 0;"><strong>Cuándo Repetir:</strong><p id="detalle-cuando_repetir" style="color: var(--text-muted);">[ cuando_repetir ]</p></div>
-
             <div style="margin: 1.5rem 0; padding-top: 1rem; border-top: 1px solid var(--border);">
                 <h3 style="color: var(--accent); margin-bottom: 1rem;">Orden de las Cartas</h3>
                 <div id="detalle-posiciones"></div>
             </div>
         </div>
-
         <div style="text-align: center; margin-top: 2rem;">
             <button class="btn" onclick="navigateTo('ejecucion')">Iniciar Tirada →</button>
         </div>
     </section>
 
-    <!-- PANTALLA 7: EJECUCIÓN -->
     <section id="ejecucion" class="screen">
         <div class="nav-header">
             <span class="nav-back" onclick="navigateTo('detalle-tirada')">← Volver</span>
             <span>Ejecución de Tirada</span>
         </div>
-
         <h2 style="text-align: center;">Selecciona las Cartas</h2>
-
-        <div class="execution-grid" id="execution-slots">
-            <!-- Slots generados dinámicamente desde JSON -->
-        </div>
-
+        <div class="execution-grid" id="execution-slots"></div>
         <div style="text-align: center; margin-top: 2rem;">
             <button class="btn btn-modo" onclick="toggleAutoMode()" style="margin-right: 1rem;">Modo Automático</button>
             <button class="btn" onclick="navigateTo('resultado')">[ VER RESULTADO ]</button>
         </div>
     </section>
 
-    <!-- PANTALLA 8: RESULTADO -->
     <section id="resultado" class="screen">
         <div class="nav-header">
             <span class="nav-back" onclick="navigateTo('ejecucion')">← Volver</span>
             <span>Resultado de la Tirada</span>
         </div>
-
         <h1 style="text-align: center; margin-bottom: 2rem;">Resultado</h1>
-
         <div id="resultado-parte-1" class="result-part">
             <h3>📋 Parte 1 - Cartas Seleccionadas</h3>
             <div id="cartas-seleccionadas-container" class="empty-state"><p>Cargando cartas...</p></div>
         </div>
-
         <div id="resultado-parte-2" class="result-part">
             <h3>🔮 Parte 2 - Ficha Técnica</h3>
             <div class="expandible">
-                <div class="expandible-header" onclick="toggleExpandible(this)">
-                    <span>Ver ficha técnica completa</span>
-                </div>
+                <div class="expandible-header" onclick="toggleExpandible(this)"><span>Ver ficha técnica completa</span></div>
                 <div class="expandible-content">
                     <div class="ficha-tecnica-grid" id="ficha-tecnica-dinamica">
                         <div class="empty-state"><p>Cargando ficha técnica...</p></div>
@@ -1408,467 +245,855 @@
                 </div>
             </div>
         </div>
-
         <div id="resultado-parte-3" class="result-part">
             <h3>📖 Parte 3 - Interpretación por Tema</h3>
-            <div id="interpretaciones-dinamicas">
-                <div class="empty-state"><p>Cargando interpretaciones...</p></div>
-            </div>
+            <div id="interpretaciones-dinamicas"><div class="empty-state"><p>Cargando interpretaciones...</p></div></div>
         </div>
-
         <div id="resultado-parte-4" class="result-part">
             <h3>✨ Parte 4 - Conclusión Final</h3>
-            <div id="conclusion-dinamica">
-                <div class="empty-state"><p>Generando conclusión...</p></div>
-            </div>
+            <div id="conclusion-dinamica"><div class="empty-state"><p>Generando conclusión...</p></div></div>
         </div>
-
         <div style="text-align: center; margin-top: 2rem;">
             <button class="btn" onclick="navigateTo('menu-principal')">Nueva Tirada</button>
         </div>
     </section>
 
-    <!-- PÁGINA ARCANOS -->
     <section id="arcanos" class="screen">
         <div class="nav-header">
             <span class="nav-back" onclick="navigateTo('menu-principal')">← Volver</span>
             <span>Los Arcanos</span>
         </div>
-
         <h1 style="text-align: center;">Los 78 Arcanos</h1>
-
         <div class="arcanos-section">
             <h2 class="arcanos-section-title">🌟 Arcanos Mayores (22 cartas)</h2>
             <div class="arcanos-grid" id="arcanos-mayores-grid"></div>
         </div>
-
         <div class="arcanos-section">
             <h2 class="arcanos-section-title">🏆 Copas (14 cartas)</h2>
             <div class="arcanos-grid" id="arcanos-copas-grid"></div>
         </div>
-
         <div class="arcanos-section">
             <h2 class="arcanos-section-title">💰 Deniers (14 cartas)</h2>
             <div class="arcanos-grid" id="arcanos-deniers-grid"></div>
         </div>
-
         <div class="arcanos-section">
             <h2 class="arcanos-section-title">⚔️ Épées (14 cartas)</h2>
             <div class="arcanos-grid" id="arcanos-epees-grid"></div>
         </div>
-
         <div class="arcanos-section">
             <h2 class="arcanos-section-title">🌿 Bâtons (14 cartas)</h2>
             <div class="arcanos-grid" id="arcanos-batons-grid"></div>
         </div>
     </section>
 
-    <!-- PÁGINA DETALLE ARCANO -->
     <section id="detalle-arcano" class="screen">
         <div class="nav-header">
             <span class="nav-back" onclick="navigateTo('arcanos')">← Volver</span>
             <span>Ficha del Arcano</span>
         </div>
-
         <div class="card" style="max-width: 800px; margin: 0 auto;">
             <div style="text-align: center; margin-bottom: 2rem;">
                 <div class="card-slot" style="margin: 0 auto; width: 150px; height: 250px;"><span class="card-placeholder">🂠</span></div>
-                <div class="arcano-display">
+                <div style="font-size: 1.5rem; color: var(--accent); margin-top: 1rem;">
                     <span id="arcano-numero-original">[ numero_original ]</span> - 
                     <span id="arcano-nombre">[ arcano_es ]</span>
                 </div>
                 <input type="hidden" id="arcano-id" value="">
             </div>
-
-            <!-- CAMPOS VISIBLES (sin toggle, muestran R e I) -->
-            <div id="campos-visibles-container">
-                <!-- Se llena dinámicamente -->
-            </div>
-
-            <!-- FICHA TÉCNICA EXPANDIBLE -->
+            <div id="campos-visibles-container"></div>
             <div class="expandible" style="margin-top: 2rem;">
-                <div class="expandible-header" onclick="toggleExpandible(this)">
-                    <span>🔍 Ver Ficha Técnica Completa (Signo, Elemento, Planeta...)</span>
-                </div>
-                <div class="expandible-content">
-                    <div id="ficha-tecnica-container">
-                        <!-- Se llena dinámicamente -->
-                    </div>
-                </div>
+                <div class="expandible-header" onclick="toggleExpandible(this)"><span>🔍 Ver Ficha Técnica Completa</span></div>
+                <div class="expandible-content"><div id="ficha-tecnica-container"></div></div>
             </div>
         </div>
     </section>
 
-    <!-- PÁGINA MENÚ TIRADAS -->
     <section id="menu-tiradas" class="screen">
         <div class="nav-header">
             <span class="nav-back" onclick="navigateTo('menu-principal')">← Volver</span>
             <span>Menú Tiradas - Búsqueda</span>
         </div>
-
         <h2 style="text-align: center;">Atajo Directo - Busca tu Tirada</h2>
-
         <div style="text-align: center; margin-top: 2rem;">
             <button class="btn" onclick="navigateTo('menu-principal')">Volver al Menú</button>
         </div>
     </section>
 
+    <script>
 
-        // ==================== FASE 4 - MOTOR DE INTERPRETACIÓN ====================
+    // MAPEO DE LABELS
+    var LABELS = {
+        'id': 'ID', 'numero_original': 'Número', 'arcano_es': 'Nombre', 'tipo': 'Tipo',
+        'caracteristicas': 'Características', 'signo': 'Signo', 'elemento': 'Elemento',
+        'planeta': 'Planeta', 'numeros': 'Números', 'chakra': 'Chakra', 'mantra': 'Mantra',
+        'piedras_': 'Piedras', 'cristales': 'Cristales', 'esencia_': 'Esencias',
+        'incienso': 'Incienso', 'aceites_': 'Aceites', 'hierbas': 'Hierbas',
+        'cabala': 'Cábala', 'color': 'Color', 'planta': 'Planta',
+        'palabras_clave': 'Palabras Clave', 'alerta': 'Alerta',
+        'proximo_paso': 'Próximo Paso', 'respuesta_corta': 'Respuesta Corta',
+        'extra_1': 'Tiempo o Dinámica', 'extra_2': 'Lugar o Persona',
+        'recomendaciones_meditacion': 'Recomendaciones',
+        'aspectos_personalidad': 'Aspectos de la Personalidad',
+        'actividades_sugeridas': 'Actividades Sugeridas',
+        'gen': 'General', 'rel_auto': 'Relaciones & Autoconocimiento',
+        'amor': 'Amor', 'trabajo': 'Trabajo', 'dinero': 'Dinero', 'salud': 'Salud',
+        'decisiones_elecciones': 'Decisiones y Elecciones',
+        'energia_dia': 'Energía del Día',
+        'espiritualidad_crecimiento': 'Espiritualidad y Crecimiento',
+        'familia_hogar': 'Familia y Hogar', 'preguntas_si_no': 'Preguntas Sí/No',
+        'proyectos_creatividad': 'Proyectos y Creatividad',
+        'viajes_mudanzas': 'Viajes y Mudanzas', 'linea_tiempo': 'Línea del Tiempo',
+        'pasado': 'Pasado', 'presente': 'Presente', 'futuro': 'Futuro'
+    };
 
-        function getInterpretacion(carta, tema, orientacion) {
-            if (!carta) return null;
+    var TEMAS_FILTRO = [
+        { tecnico: 'gen', visual: 'Lecturas Generales' },
+        { tecnico: 'rel_auto', visual: 'Relaciones & Autoconocimiento' },
+        { tecnico: 'amor', visual: 'Amor' },
+        { tecnico: 'trabajo', visual: 'Trabajo' },
+        { tecnico: 'dinero', visual: 'Dinero' },
+        { tecnico: 'salud', visual: 'Salud' },
+        { tecnico: 'preguntas_si_no', visual: 'Preguntas Sí/No' },
+        { tecnico: 'energia_dia', visual: 'Energía del Día' },
+        { tecnico: 'decisiones_elecciones', visual: 'Decisiones y Elecciones' },
+        { tecnico: 'espiritualidad_crecimiento', visual: 'Espiritualidad y Crecimiento' },
+        { tecnico: 'proyectos_creatividad', visual: 'Proyectos y Creatividad' },
+        { tecnico: 'viajes_mudanzas', visual: 'Viajes y Mudanzas' },
+        { tecnico: 'familia_hogar', visual: 'Familia y Hogar' },
+        { tecnico: 'linea_tiempo', visual: 'Línea del Tiempo' }
+    ];
 
-            // Si es línea del tiempo, usar pasado/presente/futuro
-            if (tema === 'linea_tiempo') {
-                var posicion = appState.cartasSeleccionadas.find(function(cs) { 
-                    return cs.carta.id === carta.id; 
-                });
-                if (posicion) {
-                    var idx = posicion.posicion;
-                    var tiempo = idx === 0 ? 'pasado' : (idx === 1 ? 'presente' : 'futuro');
-                    var campo = tiempo + '_' + (orientacion === 'R' ? 'recta' : 'inv');
-                    return carta[campo] || carta[tiempo] || 'Sin interpretación para esta posición';
-                }
+    var CAMPOS_VISIBLES = [
+        { campo: 'caracteristicas', tipo: 'unico' },
+        { campo: 'palabras_clave', tipo: 'doble' },
+        { campo: 'alerta', tipo: 'doble' },
+        { campo: 'proximo_paso', tipo: 'doble' },
+        { campo: 'respuesta_corta', tipo: 'doble' },
+        { campo: 'extra_1', tipo: 'doble', label: 'Tiempo o Dinámica' },
+        { campo: 'extra_2', tipo: 'doble', label: 'Lugar o Persona' },
+        { campo: 'recomendaciones_meditacion', tipo: 'doble', label: 'Recomendaciones' },
+        { campo: 'aspectos_personalidad', tipo: 'doble', label: 'Aspectos de la Personalidad' },
+        { campo: 'actividades_sugeridas', tipo: 'doble', label: 'Actividades Sugeridas' }
+    ];
+
+    var cartasData = [];
+    var tiradasData = [];
+    var posicionesData = [];
+    var combinacionesData = [];
+    var appDataLoaded = false;
+
+    var appState = {
+        mazoSeleccionado: null,
+        modoLectura: null,
+        temaSeleccionado: null,
+        tiradaActual: null,
+        arcanoActual: null,
+        cartasSeleccionadas: [],
+        autoMode: false
+    };
+
+    function getLabel(campo) { return LABELS[campo] || campo; }
+
+    async function loadJSON(url) {
+        try {
+            console.log('Cargando:', url);
+            var response = await fetch(url);
+            if (!response.ok) throw new Error('HTTP ' + response.status);
+            var data = await response.json();
+            console.log('Cargado:', url, '-', Array.isArray(data) ? data.length + ' items' : 'OK');
+            return data;
+        } catch (error) {
+            console.error('Error cargando', url + ':', error);
+            throw error;
+        }
+    }
+
+    async function initApp() {
+        try {
+            updateLoadingText('Cargando cartas...');
+            cartasData = await loadJSON('cartas.json');
+
+            updateLoadingText('Cargando tiradas...');
+            tiradasData = await loadJSON('tiradas.json');
+
+            updateLoadingText('Cargando posiciones...');
+            posicionesData = await loadJSON('posiciones.json');
+
+            try {
+                combinacionesData = await loadJSON('combinaciones.json');
+            } catch (e) {
+                console.log('Combinaciones no cargadas');
+                combinacionesData = [];
             }
 
-            // Para otros temas, usar tema_recta o tema_inv
-            var campo = tema + '_' + (orientacion === 'R' ? 'recta' : 'inv');
-            return carta[campo] || carta[tema] || 'Sin interpretación para este tema';
+            appDataLoaded = true;
+            document.getElementById('btn-entrar').disabled = false;
+
+            setTimeout(function() {
+                document.getElementById('loading-overlay').style.display = 'none';
+            }, 500);
+
+            console.log('App inicializada:', cartasData.length, 'cartas,', tiradasData.length, 'tiradas');
+        } catch (error) {
+            updateLoadingText('Error al cargar datos');
+            document.getElementById('loading-text').innerHTML = 
+                '<div style="color:var(--accent);text-align:center;padding:2rem;">Error: ' + error.message + '<br>Verifica que cartas.json, tiradas.json y posiciones.json existan.</div>';
+        }
+    }
+
+    function updateLoadingText(text) {
+        var el = document.getElementById('loading-text');
+        if (el) el.textContent = text;
+    }
+
+    function navigateTo(screenId) {
+        if (screenId !== 'homepage' && !appDataLoaded) {
+            alert('Cargando datos... por favor espera.');
+            return;
         }
 
-        function procesarCarta(cartaSeleccionada) {
-            var carta = cartaSeleccionada.carta;
-            var orientacion = cartaSeleccionada.orientacion;
-            var tema = appState.tiradaActual ? appState.tiradaActual.tema : 'gen';
-
-            return {
-                carta: carta,
-                orientacion: orientacion,
-                interpretacion: getInterpretacion(carta, tema, orientacion)
-            };
+        var screens = document.getElementsByClassName('screen');
+        for (var i = 0; i < screens.length; i++) screens[i].classList.remove('active');
+        var target = document.getElementById(screenId);
+        if (target) {
+            target.classList.add('active');
+            window.scrollTo(0, 0);
         }
 
-        // ==================== FASE 5 - RENDERIZADO DE RESULTADO ====================
+        if (screenId === 'arcanos') renderArcanos();
+        else if (screenId === 'explorar-tiradas') { actualizarDisplayModo(); generarBotonesTemas(); }
+        else if (screenId === 'listado-tiradas') { actualizarInfoListado(); renderListadoTiradas(); }
+        else if (screenId === 'detalle-arcano') { renderDetalleArcano(); }
+        else if (screenId === 'ejecucion') initExecutionSlots();
+        else if (screenId === 'resultado') renderResultado();
+    }
 
-        function renderResultado() {
-            if (!appState.cartasSeleccionadas.length) {
-                alert('Selecciona al menos una carta');
-                navigateTo('ejecucion');
-                return;
+    function selectMazo(numero, elemento) {
+        appState.mazoSeleccionado = numero;
+        var cards = document.querySelectorAll('.mazo-card');
+        for (var i = 0; i < cards.length; i++) cards[i].classList.remove('selected');
+        elemento.classList.add('selected');
+    }
+
+    function seleccionarModoYContinuar(modo, elemento) {
+        appState.modoLectura = modo;
+        var btns = document.querySelectorAll('.btn-modo');
+        for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+        elemento.classList.add('active');
+        setTimeout(function() { navigateTo('menu-principal'); }, 300);
+    }
+
+    function actualizarDisplayModo() {
+        var modoTexto = appState.modoLectura === 'automatico' ? 'Automático' : 'Manual';
+        document.getElementById('modo-texto').textContent = modoTexto;
+    }
+
+    function generarBotonesTemas() {
+        var container = document.getElementById('temas-filter-grid');
+        if (!container) return;
+        container.innerHTML = '';
+
+        for (var i = 0; i < TEMAS_FILTRO.length; i++) {
+            var tema = TEMAS_FILTRO[i];
+            var btn = document.createElement('button');
+            btn.className = 'filter-btn';
+            btn.textContent = tema.visual;
+            btn.onclick = (function(t) {
+                return function() {
+                    var btns = document.querySelectorAll('.filter-btn');
+                    for (var j = 0; j < btns.length; j++) btns[j].classList.remove('active');
+                    this.classList.add('active');
+                    appState.temaSeleccionado = t.tecnico;
+                };
+            })(tema);
+            container.appendChild(btn);
+        }
+    }
+
+    function verTiradasFiltradas() {
+        if (!appState.temaSeleccionado) {
+            alert('Selecciona un tema primero');
+            return;
+        }
+        navigateTo('listado-tiradas');
+    }
+
+    function actualizarInfoListado() {
+        var temaVisual = null;
+        for (var i = 0; i < TEMAS_FILTRO.length; i++) {
+            if (TEMAS_FILTRO[i].tecnico === appState.temaSeleccionado) {
+                temaVisual = TEMAS_FILTRO[i];
+                break;
             }
+        }
+        document.getElementById('listado-modo-texto').textContent = appState.modoLectura === 'automatico' ? 'Automático' : 'Manual';
+        document.getElementById('listado-tema-texto').textContent = temaVisual ? temaVisual.visual : '-';
+    }
 
-            renderParte1();
-            renderParte2();
-            renderParte3();
-            renderParte4();
+    function renderListadoTiradas() {
+        var container = document.getElementById('tiradas-lista');
+        if (!container || !tiradasData.length) return;
+
+        var filtradas = [];
+        for (var i = 0; i < tiradasData.length; i++) {
+            if (tiradasData[i].tema === appState.temaSeleccionado) filtradas.push(tiradasData[i]);
         }
 
-        function renderParte1() {
-            var container = document.getElementById('cartas-seleccionadas-container');
-            if (!container) return;
+        if (!filtradas.length) {
+            container.innerHTML = '<div class="empty-state"><p>No hay tiradas para este tema</p></div>';
+            return;
+        }
 
-            container.innerHTML = '';
-            container.className = 'execution-grid';
+        container.innerHTML = '';
+        for (var i = 0; i < filtradas.length; i++) {
+            var tirada = filtradas[i];
+            var item = document.createElement('div');
+            item.className = 'tirada-item';
+            item.innerHTML = 
+                '<div class="tirada-number">' + (i + 1) + '</div>' +
+                '<div class="tirada-info"><h4>' + tirada.nombre_tirada + '</h4>' +
+                '<div class="tirada-meta">' + tirada.num_cartas + ' cartas</div></div>' +
+                '<div class="tirada-badge">Ver</div>';
+            item.onclick = (function(t) {
+                return function() {
+                    appState.tiradaActual = t;
+                    mostrarDetalleTirada(t);
+                    navigateTo('detalle-tirada');
+                };
+            })(tirada);
+            container.appendChild(item);
+        }
+    }
 
-            appState.cartasSeleccionadas.forEach(function(cs, idx) {
+    function mostrarDetalleTirada(tirada) {
+        document.getElementById('detalle-nombre_tirada').textContent = tirada.nombre_tirada;
+        document.getElementById('detalle-tema').textContent = tirada.tema;
+        document.getElementById('detalle-num_cartas').textContent = tirada.num_cartas;
+        document.getElementById('detalle-intencion').textContent = tirada.intencion || 'Sin intención definida';
+        document.getElementById('detalle-tiempo_validez').textContent = tirada.tiempo_validez || 'No especificado';
+        document.getElementById('detalle-cuando_repetir').textContent = tirada.cuando_repetir || 'No especificado';
+
+        var posContainer = document.getElementById('detalle-posiciones');
+        posContainer.innerHTML = '';
+        if (tirada.posiciones && tirada.posiciones.length) {
+            for (var i = 0; i < tirada.posiciones.length; i++) {
+                var pos = tirada.posiciones[i];
                 var div = document.createElement('div');
-                div.className = 'slot-container';
-                div.style.animationDelay = (idx * 0.1) + 's';
+                div.className = 'posicion-detalle';
                 div.innerHTML = 
-                    '<div class="card-slot selected" style="width:100px;height:150px;">' +
-                        '<div style="font-size:0.7rem;text-align:center;">' + 
-                            cs.carta.numero_original + '<br><small>' + cs.orientacion + '</small>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="slot-label">Carta ' + (idx + 1) + '</div>';
-                container.appendChild(div);
-            });
+                    '<div class="posicion-numero">Carta ' + (i + 1) + '</div>' +
+                    '<div class="posicion-nombre">' + pos.nombre + '</div>' +
+                    '<div class="posicion-significado">' + pos.significado + '</div>';
+                posContainer.appendChild(div);
+            }
+        }
+    }
+
+    function initExecutionSlots() {
+        var container = document.getElementById('execution-slots');
+        if (!container || !appState.tiradaActual) return;
+
+        container.innerHTML = '';
+        var numCartas = appState.tiradaActual.num_cartas || 3;
+        appState.cartasSeleccionadas = [];
+
+        for (var i = 0; i < numCartas; i++) {
+            var slotDiv = document.createElement('div');
+            slotDiv.className = 'slot-container';
+            slotDiv.style.animationDelay = (i * 0.1) + 's';
+
+            var slot = document.createElement('div');
+            slot.className = 'card-slot';
+            slot.id = 'slot-' + i;
+            slot.innerHTML = '<span class="card-placeholder">🂠</span>';
+            slot.onclick = (function(index) {
+                return function() { abrirSelectorCarta(index); };
+            })(i);
+
+            var label = document.createElement('div');
+            label.className = 'slot-label';
+            label.textContent = 'Carta ' + (i + 1);
+
+            slotDiv.appendChild(slot);
+            slotDiv.appendChild(label);
+            container.appendChild(slotDiv);
+        }
+    }
+
+    function abrirSelectorCarta(index) {
+        var modal = document.createElement('div');
+        modal.id = 'modal-selector';
+        modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;';
+
+        var titulo = document.createElement('h2');
+        titulo.textContent = 'Selecciona Carta ' + (index + 1);
+        titulo.style.cssText = 'color:var(--text);margin-bottom:1rem;';
+        modal.appendChild(titulo);
+
+        var selectContainer = document.createElement('div');
+        selectContainer.className = 'select-container';
+        selectContainer.style.cssText = 'width:100%;max-width:400px;margin-bottom:1rem;';
+
+        var select = document.createElement('select');
+        select.id = 'select-carta-' + index;
+        select.style.cssText = 'width:100%;padding:1rem;background:rgba(26,26,46,0.95);border:2px solid var(--accent);color:var(--text);border-radius:8px;font-size:1rem;';
+
+        var defaultOpt = document.createElement('option');
+        defaultOpt.value = '';
+        defaultOpt.textContent = '-- Selecciona una carta --';
+        select.appendChild(defaultOpt);
+
+        for (var i = 0; i < cartasData.length; i++) {
+            var carta = cartasData[i];
+            var opt = document.createElement('option');
+            opt.value = carta.id;
+            opt.textContent = carta.numero_original + ' - ' + carta.arcano_es;
+            select.appendChild(opt);
         }
 
-        function renderParte2() {
-            var container = document.getElementById('ficha-tecnica-dinamica');
-            if (!container) return;
+        var tooltip = document.createElement('div');
+        tooltip.className = 'select-tooltip';
+        tooltip.textContent = 'Elige una carta del mazo';
+        selectContainer.appendChild(tooltip);
+        selectContainer.appendChild(select);
+        modal.appendChild(selectContainer);
 
-            container.innerHTML = '';
+        var orientDiv = document.createElement('div');
+        orientDiv.className = 'orientation-toggle';
+        orientDiv.style.cssText = 'margin:1rem 0;';
 
-            appState.cartasSeleccionadas.forEach(function(cs, idx) {
-                var carta = cs.carta;
-                var div = document.createElement('div');
-                div.className = 'campo-visible';
-                div.style.animationDelay = (idx * 0.1) + 's';
+        var btnRecta = document.createElement('button');
+        btnRecta.className = 'orientation-btn active';
+        btnRecta.textContent = 'Recta';
+        btnRecta.onclick = function() {
+            btnRecta.classList.add('active');
+            btnInv.classList.remove('active');
+        };
 
-                var html = '<div class="campo-titulo">' + carta.numero_original + ' - ' + carta.arcano_es + '</div>';
+        var btnInv = document.createElement('button');
+        btnInv.className = 'orientation-btn';
+        btnInv.textContent = 'Invertida';
+        btnInv.onclick = function() {
+            btnInv.classList.add('active');
+            btnRecta.classList.remove('active');
+        };
 
-                CAMPOS_VISIBLES.forEach(function(cv) {
-                    var valor = carta[cv.campo];
-                    if (valor) {
-                        if (cv.tipo === 'unico') {
-                            html += '<div class="ficha-item"><span class="ficha-label">' + 
-                                   (cv.label || getLabel(cv.campo)) + ':</span> <span class="ficha-value">' + 
-                                   valor + '</span></div>';
-                        } else if (cv.tipo === 'doble') {
-                            var valRecta = carta[cv.campo + '_recta'] || valor;
-                            var valInv = carta[cv.campo + '_inv'] || valor;
-                            html += '<div class="orientacion-par">' +
-                                   '<div class="orientacion-label">Recta:</div>' +
-                                   '<div>' + valRecta + '</div>' +
-                                   '</div>' +
-                                   '<div class="orientacion-par">' +
-                                   '<div class="orientacion-label">Invertida:</div>' +
-                                   '<div>' + valInv + '</div>' +
-                                   '</div>';
-                        }
-                    }
-                });
+        orientDiv.appendChild(btnRecta);
+        orientDiv.appendChild(btnInv);
+        modal.appendChild(orientDiv);
 
-                div.innerHTML = html;
-                container.appendChild(div);
-            });
-        }
+        var btnConfirmar = document.createElement('button');
+        btnConfirmar.className = 'btn';
+        btnConfirmar.textContent = 'Confirmar';
+        btnConfirmar.style.cssText = 'margin-top:1rem;';
+        btnConfirmar.onclick = function() {
+            var cartaId = select.value;
+            if (!cartaId) { alert('Selecciona una carta'); return; }
 
-        function renderParte3() {
-            var container = document.getElementById('interpretaciones-dinamicas');
-            if (!container) return;
-
-            container.innerHTML = '';
-            var tema = appState.tiradaActual ? appState.tiradaActual.tema : 'gen';
-
-            appState.cartasSeleccionadas.forEach(function(cs, idx) {
-                var procesada = procesarCarta(cs);
-                var div = document.createElement('div');
-                div.className = 'interpretacion-item tema-' + tema;
-                div.style.animationDelay = (idx * 0.15) + 's';
-
-                div.innerHTML = 
-                    '<div class="tema-header">' +
-                        'Carta ' + (idx + 1) + ': ' + cs.carta.arcano_es +
-                        '<span class="orientacion-tag">(' + (cs.orientacion === 'R' ? 'Recta' : 'Invertida') + ')</span>' +
-                    '</div>' +
-                    '<div class="texto-interpretacion">' + procesada.interpretacion + '</div>';
-
-                container.appendChild(div);
-            });
-        }
-
-        // ==================== FASE 6 - CONCLUSIÓN FINAL ====================
-
-        function renderParte4() {
-            var container = document.getElementById('conclusion-dinamica');
-            if (!container) return;
-
-            var conclusion = generarConclusion();
-
-            var html = '<div class="conclusion-box">' +
-                '<div class="conclusion-tipo ' + conclusion.tipo + '">' + 
-                    conclusion.tipo.toUpperCase() + 
-                '</div>' +
-                '<div class="conclusion-seccion">' +
-                    '<div class="conclusion-label">Resumen General</div>' +
-                    '<div class="conclusion-texto">' + conclusion.resumen + '</div>' +
-                '</div>' +
-                '<div class="conclusion-seccion">' +
-                    '<div class="conclusion-label">Mensaje Central</div>' +
-                    '<div class="conclusion-texto">' + conclusion.mensaje_central + '</div>' +
-                '</div>' +
-                '<div class="conclusion-seccion">' +
-                    '<div class="conclusion-label">Tendencia</div>' +
-                    '<div class="conclusion-tendencia">' +
-                        '<span class="tendencia-indicator tendencia-' + conclusion.tendencia + '"></span>' +
-                        '<span>' + conclusion.tendencia_texto + '</span>' +
-                    '</div>' +
-                '</div>' +
-                '<div class="conclusion-seccion">' +
-                    '<div class="conclusion-label">Recomendación Final</div>' +
-                    '<div class="conclusion-texto">' + conclusion.recomendacion + '</div>' +
-                '</div>';
-
-            if (conclusion.patrones && conclusion.patrones.length) {
-                html += '<div class="patrones-box">' +
-                    '<div class="conclusion-label">Patrones Detectados</div>';
-                conclusion.patrones.forEach(function(p) {
-                    html += '<span class="patron-item"><span class="patron-dot" style="background:' + p.color + '"></span>' + p.texto + '</span>';
-                });
-                html += '</div>';
+            var carta = null;
+            for (var i = 0; i < cartasData.length; i++) {
+                if (cartasData[i].id == cartaId) { carta = cartasData[i]; break; }
             }
 
-            html += '</div>';
-            container.innerHTML = html;
-        }
+            var orientacion = btnRecta.classList.contains('active') ? 'R' : 'I';
+            appState.cartasSeleccionadas[index] = { carta: carta, orientacion: orientacion, posicion: index };
 
-        function generarConclusion() {
-            var cartas = appState.cartasSeleccionadas;
-            var tema = appState.tiradaActual ? appState.tiradaActual.tema : 'gen';
+            var slot = document.getElementById('slot-' + index);
+            slot.innerHTML = '<div style="font-size:0.8rem;text-align:center;">' + carta.numero_original + '<br><small>' + orientacion + '</small></div>';
+            slot.classList.add('selected');
 
-            // Contar orientaciones
-            var rectas = cartas.filter(function(c) { return c.orientacion === 'R'; }).length;
-            var invertidas = cartas.filter(function(c) { return c.orientacion === 'I'; }).length;
-            var total = cartas.length;
+            document.body.removeChild(modal);
+        };
+        modal.appendChild(btnConfirmar);
 
-            // Determinar tipo de conclusión
-            var tipo = 'neutra';
-            if (invertidas > rectas) tipo = 'desafiante';
-            else if (rectas > invertidas) tipo = 'positiva';
+        var btnCerrar = document.createElement('button');
+        btnCerrar.className = 'btn btn-modo';
+        btnCerrar.textContent = 'Cancelar';
+        btnCerrar.style.cssText = 'margin-top:0.5rem;';
+        btnCerrar.onclick = function() { document.body.removeChild(modal); };
+        modal.appendChild(btnCerrar);
 
-            // Detectar patrones
-            var patrones = [];
-            var mayores = cartas.filter(function(c) { return c.carta.tipo === 'mayor' || c.carta.id <= 22; }).length;
-            if (mayores > total / 2) {
-                patrones.push({ texto: 'Predominio de Arcanos Mayores', color: '#e94560' });
+        document.body.appendChild(modal);
+    }
+
+    function toggleAutoMode() {
+        appState.autoMode = !appState.autoMode;
+        if (appState.autoMode) {
+            var numCartas = appState.tiradaActual ? appState.tiradaActual.num_cartas : 3;
+            for (var i = 0; i < numCartas; i++) {
+                var randomIndex = Math.floor(Math.random() * cartasData.length);
+                var carta = cartasData[randomIndex];
+                var orientacion = Math.random() > 0.5 ? 'R' : 'I';
+                appState.cartasSeleccionadas[i] = { carta: carta, orientacion: orientacion, posicion: i };
+                var slot = document.getElementById('slot-' + i);
+                if (slot) {
+                    slot.innerHTML = '<div style="font-size:0.8rem;text-align:center;">' + carta.numero_original + '<br><small>' + orientacion + '</small></div>';
+                    slot.classList.add('selected');
+                }
             }
-
-            // Generar resumen integrado (NO copiar textos literalmente)
-            var resumen = generarResumenIntegrado(cartas, tema, rectas, invertidas);
-
-            // Mensaje central basado en tema
-            var mensaje_central = generarMensajeCentral(tipo, tema, cartas);
-
-            // Tendencia
-            var tendencia = rectas > invertidas ? 'positivo' : (invertidas > rectas ? 'reto' : 'transicion');
-            var tendencia_texto = {
-                'positivo': 'Energía favorable - Momento de avance',
-                'reto': 'Energía desafiante - Momento de reflexión',
-                'transicion': 'Energía en equilibrio - Momento de observación'
-            }[tendencia];
-
-            // Recomendación final
-            var recomendacion = generarRecomendacion(tipo, tema, cartas);
-
-            return {
-                tipo: tipo,
-                resumen: resumen,
-                mensaje_central: mensaje_central,
-                tendencia: tendencia,
-                tendencia_texto: tendencia_texto,
-                recomendacion: recomendacion,
-                patrones: patrones
-            };
         }
+    }
 
-        function generarResumenIntegrado(cartas, tema, rectas, invertidas) {
-            // Extraer conceptos clave de cada carta sin copiar literalmente
-            var conceptos = [];
-            cartas.forEach(function(cs) {
-                var interp = getInterpretacion(cs.carta, tema, cs.orientacion);
-                if (interp) {
-                    // Extraer palabras clave (primeras 3-5 palabras significativas)
-                    var palabras = interp.split(/[.,;]/)[0].split(' ').slice(0, 5).join(' ');
-                    conceptos.push(palabras.toLowerCase());
+    function getInterpretacion(carta, tema, orientacion) {
+        if (!carta) return 'Sin interpretación';
+
+        if (tema === 'linea_tiempo') {
+            var posicion = null;
+            for (var i = 0; i < appState.cartasSeleccionadas.length; i++) {
+                if (appState.cartasSeleccionadas[i].carta.id === carta.id) {
+                    posicion = appState.cartasSeleccionadas[i];
+                    break;
                 }
-            });
-
-            var balance = rectas > invertidas ? 'predominio de energías claras' : 
-                         (invertidas > rectas ? 'presencia de bloqueos a superar' : 'equilibrio entre fuerzas');
-
-            return 'La tirada revela ' + balance + '. ' +
-                   'Las cartas indican un momento donde ' + conceptos.join(', ').replace(/,([^,]*)$/, ' y$1') + '. ' +
-                   'Esta configuración sugiere que estás atravesando un período de transformación ' +
-                   'donde las decisiones tomadas ahora tendrán impacto significativo en tu camino.';
+            }
+            if (posicion) {
+                var idx = posicion.posicion;
+                var tiempo = idx === 0 ? 'pasado' : (idx === 1 ? 'presente' : 'futuro');
+                var campo = tiempo + '_' + (orientacion === 'R' ? 'recta' : 'inv');
+                return carta[campo] || carta[tiempo] || 'Sin interpretación para esta posición';
+            }
         }
 
-        function generarMensajeCentral(tipo, tema, cartas) {
-            var mensajes = {
-                'positiva': {
-                    'amor': 'El amor fluye naturalmente hacia ti. Mantente receptivo a las señales del universo.',
-                    'trabajo': 'Tus esfuerzos están dando frutos. Es momento de consolidar logros y planificar el siguiente paso.',
-                    'dinero': 'La abundancia se manifiesta en tu vida. Confía en tu capacidad para gestionar recursos.',
-                    'salud': 'Tu energía vital está en ascenso. Aprovecha este momento para fortalecer hábitos saludables.',
-                    'gen': 'Las energías están alineadas a tu favor. Avanza con confianza hacia tus metas.'
-                },
-                'desafiante': {
-                    'amor': 'Hay lecciones importantes por aprender en el ámbito emocional. La paciencia será tu aliada.',
-                    'trabajo': 'Los obstáculos actuales son oportunidades de crecimiento disfrazadas. Mantén la perseverancia.',
-                    'dinero': 'Es momento de revisar patrones financieros. La prudencia ahora evitará problemas futuros.',
-                    'salud': 'Presta atención a las señales de tu cuerpo. El descanso y la introspección son necesarios.',
-                    'gen': 'Los desafíos presentes son maestros que te preparan para lo que viene. Confía en el proceso.'
-                },
-                'neutra': {
-                    'amor': 'Un período de estabilidad emocional te permite observar con claridad.',
-                    'trabajo': 'Momento de consolidación. No fuerces cambios, permite que las cosas fluyan naturalmente.',
-                    'dinero': 'La situación financiera es estable. Es buen momento para planificar a largo plazo.',
-                    'salud': 'Mantén el equilibrio actual. Pequeños ajustes traerán grandes beneficios.',
-                    'gen': 'Estás en un punto de inflexión. La observación consciente revelará el siguiente paso.'
-                }
-            };
+        var campoTema = tema + '_' + (orientacion === 'R' ? 'recta' : 'inv');
+        return carta[campoTema] || carta[tema] || 'Sin interpretación para este tema';
+    }
 
-            return (mensajes[tipo] && mensajes[tipo][tema]) || mensajes[tipo]['gen'] || 
-                   'Cada carta trae un mensaje único. Integra estas enseñanzas en tu camino.';
+    function procesarCarta(cartaSeleccionada) {
+        var carta = cartaSeleccionada.carta;
+        var orientacion = cartaSeleccionada.orientacion;
+        var tema = appState.tiradaActual ? appState.tiradaActual.tema : 'gen';
+        return {
+            carta: carta,
+            orientacion: orientacion,
+            interpretacion: getInterpretacion(carta, tema, orientacion)
+        };
+    }
+
+    function renderResultado() {
+        if (!appState.cartasSeleccionadas.length) {
+            alert('Selecciona al menos una carta');
+            navigateTo('ejecucion');
+            return;
         }
+        renderParte1();
+        renderParte2();
+        renderParte3();
+        renderParte4();
+    }
 
-        function generarRecomendacion(tipo, tema, cartas) {
-            var recomendaciones = {
-                'positiva': 'Avanza con confianza pero mantén la humildad. Esta energía favorable es un regalo que debes usar sabiamente para construir bases sólidas.',
-                'desafiante': 'No luches contra la corriente. Respira profundo, recarga energías y vuelve a intentarlo cuando sientas que el momento es correcto.',
-                'neutra': 'Observa sin juzgar. A veces la mejor acción es no actuar, permitiendo que las respuestas se revelen por sí mismas.'
-            };
+    function renderParte1() {
+        var container = document.getElementById('cartas-seleccionadas-container');
+        if (!container) return;
+        container.innerHTML = '';
+        container.className = 'execution-grid';
 
-            return recomendaciones[tipo] || 'Confía en tu intuición y sigue adelante.';
+        for (var i = 0; i < appState.cartasSeleccionadas.length; i++) {
+            var cs = appState.cartasSeleccionadas[i];
+            var div = document.createElement('div');
+            div.className = 'slot-container';
+            div.style.animationDelay = (i * 0.1) + 's';
+            div.innerHTML = 
+                '<div class="card-slot selected" style="width:100px;height:150px;">' +
+                '<div style="font-size:0.7rem;text-align:center;">' + 
+                cs.carta.numero_original + '<br><small>' + cs.orientacion + '</small></div></div>' +
+                '<div class="slot-label">Carta ' + (i + 1) + '</div>';
+            container.appendChild(div);
         }
+    }
 
-        // ==================== UTILIDADES ====================
+    function renderParte2() {
+        var container = document.getElementById('ficha-tecnica-dinamica');
+        if (!container) return;
+        container.innerHTML = '';
 
-        function toggleExpandible(header) {
-            var expandible = header.parentElement;
-            expandible.classList.toggle('expanded');
-        }
+        for (var i = 0; i < appState.cartasSeleccionadas.length; i++) {
+            var cs = appState.cartasSeleccionadas[i];
+            var carta = cs.carta;
+            var div = document.createElement('div');
+            div.className = 'campo-visible';
+            div.style.animationDelay = (i * 0.1) + 's';
 
-        function renderDetalleArcano() {
-            if (!appState.arcanoActual) return;
+            var html = '<div class="campo-titulo">' + carta.numero_original + ' - ' + carta.arcano_es + '</div>';
 
-            var carta = cartasData.find(function(c) { return c.id === appState.arcanoActual.id; });
-            if (!carta) return;
-
-            document.getElementById('arcano-numero-original').textContent = carta.numero_original;
-            document.getElementById('arcano-nombre').textContent = carta.arcano_es;
-            document.getElementById('arcano-id').value = carta.id;
-
-            // Campos visibles
-            var visContainer = document.getElementById('campos-visibles-container');
-            visContainer.innerHTML = '';
-
-            CAMPOS_VISIBLES.forEach(function(cv) {
-                var div = document.createElement('div');
-                div.className = 'campo-visible';
-
-                var html = '<div class="campo-titulo">' + (cv.label || getLabel(cv.campo)) + '</div>';
-
-                if (cv.tipo === 'unico') {
-                    var valor = carta[cv.campo];
-                    if (valor) html += '<div>' + valor + '</div>';
-                } else {
-                    var valRecta = carta[cv.campo + '_recta'] || carta[cv.campo];
-                    var valInv = carta[cv.campo + '_inv'] || carta[cv.campo];
-                    html += '<div class="orientacion-par"><div class="orientacion-label">Recta:</div><div>' + (valRecta || 'N/A') + '</div></div>';
-                    html += '<div class="orientacion-par"><div class="orientacion-label">Invertida:</div><div>' + (valInv || 'N/A') + '</div></div>';
-                }
-
-                div.innerHTML = html;
-                visContainer.appendChild(div);
-            });
-
-            // Ficha técnica
-            var fichaContainer = document.getElementById('ficha-tecnica-container');
-            fichaContainer.innerHTML = '';
-
-            var camposFicha = ['signo', 'elemento', 'planeta', 'numeros', 'chakra', 'mantra', 
-                              'piedras_', 'cristales', 'esencia_', 'incienso', 'aceites_', 
-                              'hierbas', 'cabala', 'color', 'planta'];
-
-            camposFicha.forEach(function(campo) {
-                var valor = carta[campo];
+            for (var j = 0; j < CAMPOS_VISIBLES.length; j++) {
+                var cv = CAMPOS_VISIBLES[j];
+                var valor = carta[cv.campo];
                 if (valor) {
-                    var div = document.createElement('div');
-                    div.className = 'ficha-item';
-                    div.innerHTML = '<span class="ficha-label">' + getLabel(campo) + ':</span> <span class="ficha-value">' + valor + '</span>';
-                    fichaContainer.appendChild(div);
+                    if (cv.tipo === 'unico') {
+                        html += '<div class="ficha-item"><span class="ficha-label">' + 
+                               (cv.label || getLabel(cv.campo)) + ':</span> <span class="ficha-value">' + 
+                               valor + '</span></div>';
+                    } else {
+                        var valRecta = carta[cv.campo + '_recta'] || valor;
+                        var valInv = carta[cv.campo + '_inv'] || valor;
+                        html += '<div class="orientacion-par"><div class="orientacion-label">Recta:</div><div>' + valRecta + '</div></div>' +
+                               '<div class="orientacion-par"><div class="orientacion-label">Invertida:</div><div>' + valInv + '</div></div>';
+                    }
                 }
-            });
+            }
+            div.innerHTML = html;
+            container.appendChild(div);
+        }
+    }
+
+    function renderParte3() {
+        var container = document.getElementById('interpretaciones-dinamicas');
+        if (!container) return;
+        container.innerHTML = '';
+        var tema = appState.tiradaActual ? appState.tiradaActual.tema : 'gen';
+
+        for (var i = 0; i < appState.cartasSeleccionadas.length; i++) {
+            var cs = appState.cartasSeleccionadas[i];
+            var procesada = procesarCarta(cs);
+            var div = document.createElement('div');
+            div.className = 'interpretacion-item tema-' + tema;
+            div.style.animationDelay = (i * 0.15) + 's';
+            div.innerHTML = 
+                '<div class="tema-header">Carta ' + (i + 1) + ': ' + cs.carta.arcano_es +
+                '<span class="orientacion-tag">(' + (cs.orientacion === 'R' ? 'Recta' : 'Invertida') + ')</span></div>' +
+                '<div class="texto-interpretacion">' + procesada.interpretacion + '</div>';
+            container.appendChild(div);
+        }
+    }
+
+    function renderParte4() {
+        var container = document.getElementById('conclusion-dinamica');
+        if (!container) return;
+
+        var conclusion = generarConclusion();
+
+        var html = '<div class="conclusion-box">' +
+            '<div class="conclusion-tipo ' + conclusion.tipo + '">' + conclusion.tipo.toUpperCase() + '</div>' +
+            '<div class="conclusion-seccion"><div class="conclusion-label">Resumen General</div>' +
+            '<div class="conclusion-texto">' + conclusion.resumen + '</div></div>' +
+            '<div class="conclusion-seccion"><div class="conclusion-label">Mensaje Central</div>' +
+            '<div class="conclusion-texto">' + conclusion.mensaje_central + '</div></div>' +
+            '<div class="conclusion-seccion"><div class="conclusion-label">Tendencia</div>' +
+            '<div class="conclusion-tendencia">' +
+            '<span class="tendencia-indicator tendencia-' + conclusion.tendencia + '"></span>' +
+            '<span>' + conclusion.tendencia_texto + '</span></div></div>' +
+            '<div class="conclusion-seccion"><div class="conclusion-label">Recomendación Final</div>' +
+            '<div class="conclusion-texto">' + conclusion.recomendacion + '</div></div>';
+
+        if (conclusion.patrones && conclusion.patrones.length) {
+            html += '<div class="patrones-box"><div class="conclusion-label">Patrones Detectados</div>';
+            for (var i = 0; i < conclusion.patrones.length; i++) {
+                var p = conclusion.patrones[i];
+                html += '<span class="patron-item"><span class="patron-dot" style="background:' + p.color + '"></span>' + p.texto + '</span>';
+            }
+            html += '</div>';
+        }
+        html += '</div>';
+        container.innerHTML = html;
+    }
+
+    function generarConclusion() {
+        var cartas = appState.cartasSeleccionadas;
+        var tema = appState.tiradaActual ? appState.tiradaActual.tema : 'gen';
+
+        var rectas = 0, invertidas = 0;
+        for (var i = 0; i < cartas.length; i++) {
+            if (cartas[i].orientacion === 'R') rectas++;
+            else invertidas++;
+        }
+        var total = cartas.length;
+
+        var tipo = 'neutra';
+        if (invertidas > rectas) tipo = 'desafiante';
+        else if (rectas > invertidas) tipo = 'positiva';
+
+        var patrones = [];
+        var mayores = 0;
+        for (var i = 0; i < cartas.length; i++) {
+            if (cartas[i].carta.tipo === 'mayor' || cartas[i].carta.id <= 22) mayores++;
+        }
+        if (mayores > total / 2) {
+            patrones.push({ texto: 'Predominio de Arcanos Mayores', color: '#e94560' });
         }
 
-        // Inicializar al cargar
-        document.addEventListener('DOMContentLoaded', function() {
-            initApp();
-        });
+        var resumen = generarResumenIntegrado(cartas, tema, rectas, invertidas);
+        var mensaje_central = generarMensajeCentral(tipo, tema, cartas);
+        var tendencia = rectas > invertidas ? 'positivo' : (invertidas > rectas ? 'reto' : 'transicion');
+        var tendencia_textos = {
+            'positivo': 'Energía favorable - Momento de avance',
+            'reto': 'Energía desafiante - Momento de reflexión',
+            'transicion': 'Energía en equilibrio - Momento de observación'
+        };
+        var recomendacion = generarRecomendacion(tipo, tema, cartas);
+
+        return {
+            tipo: tipo,
+            resumen: resumen,
+            mensaje_central: mensaje_central,
+            tendencia: tendencia,
+            tendencia_texto: tendencia_textos[tendencia],
+            recomendacion: recomendacion,
+            patrones: patrones
+        };
+    }
+
+    function generarResumenIntegrado(cartas, tema, rectas, invertidas) {
+        var conceptos = [];
+        for (var i = 0; i < cartas.length; i++) {
+            var interp = getInterpretacion(cartas[i].carta, tema, cartas[i].orientacion);
+            if (interp) {
+                var palabras = interp.split(/[.,;]/)[0].split(' ').slice(0, 5).join(' ');
+                conceptos.push(palabras.toLowerCase());
+            }
+        }
+        var balance = rectas > invertidas ? 'predominio de energías claras' : 
+                     (invertidas > rectas ? 'presencia de bloqueos a superar' : 'equilibrio entre fuerzas');
+        return 'La tirada revela ' + balance + '. Las cartas indican un momento donde ' + 
+               conceptos.join(', ') + '. Esta configuración sugiere que estás atravesando un período de transformación.';
+    }
+
+    function generarMensajeCentral(tipo, tema, cartas) {
+        var mensajes = {
+            'positiva': {
+                'amor': 'El amor fluye naturalmente hacia ti. Mantente receptivo a las señales.',
+                'trabajo': 'Tus esfuerzos dan frutos. Es momento de consolidar logros.',
+                'dinero': 'La abundancia se manifiesta. Confía en tu capacidad.',
+                'salud': 'Tu energía está en ascenso. Fortalece hábitos saludables.',
+                'gen': 'Las energías están alineadas a tu favor. Avanza con confianza.'
+            },
+            'desafiante': {
+                'amor': 'Hay lecciones por aprender en el ámbito emocional. La paciencia será tu aliada.',
+                'trabajo': 'Los obstáculos son oportunidades de crecimiento. Mantén perseverancia.',
+                'dinero': 'Revisa patrones financieros. La prudencia evitará problemas futuros.',
+                'salud': 'Presta atención a las señales de tu cuerpo. El descanso es necesario.',
+                'gen': 'Los desafíos te preparan para lo que viene. Confía en el proceso.'
+            },
+            'neutra': {
+                'amor': 'Un período de estabilidad emocional te permite observar con claridad.',
+                'trabajo': 'Momento de consolidación. Permite que las cosas fluyan naturalmente.',
+                'dinero': 'La situación es estable. Es buen momento para planificar.',
+                'salud': 'Mantén el equilibrio actual. Pequeños ajustes traerán beneficios.',
+                'gen': 'Estás en un punto de inflexión. La observación revelará el siguiente paso.'
+            }
+        };
+        return (mensajes[tipo] && mensajes[tipo][tema]) || mensajes[tipo]['gen'] || 
+               'Cada carta trae un mensaje único. Integra estas enseñanzas en tu camino.';
+    }
+
+    function generarRecomendacion(tipo, tema, cartas) {
+        var recomendaciones = {
+            'positiva': 'Avanza con confianza pero mantén la humildad. Esta energía favorable es un regalo que debes usar sabiamente.',
+            'desafiante': 'No luches contra la corriente. Respira profundo, recarga energías y vuelve a intentarlo cuando el momento sea correcto.',
+            'neutra': 'Observa sin juzgar. A veces la mejor acción es no actuar, permitiendo que las respuestas se revelen.'
+        };
+        return recomendaciones[tipo] || 'Confía en tu intuición y sigue adelante.';
+    }
+
+    function toggleExpandible(header) {
+        var expandible = header.parentElement;
+        expandible.classList.toggle('expanded');
+    }
+
+    function renderArcanos() {
+        var grids = ['arcanos-mayores-grid', 'arcanos-copas-grid', 'arcanos-deniers-grid', 'arcanos-epees-grid', 'arcanos-batons-grid'];
+        for (var i = 0; i < grids.length; i++) {
+            var el = document.getElementById(grids[i]);
+            if (el) el.innerHTML = '';
+        }
+        if (!cartasData.length) return;
+
+        var mayores = [], copas = [], deniers = [], epees = [], batons = [];
+        for (var i = 0; i < cartasData.length; i++) {
+            var c = cartasData[i];
+            if (c.tipo === 'mayor' || (c.id >= 1 && c.id <= 22)) mayores.push(c);
+            else if (c.tipo === 'copas' || (c.id >= 23 && c.id <= 36)) copas.push(c);
+            else if (c.tipo === 'deniers' || (c.id >= 37 && c.id <= 50)) deniers.push(c);
+            else if (c.tipo === 'epees' || (c.id >= 51 && c.id <= 64)) epees.push(c);
+            else if (c.tipo === 'batons' || (c.id >= 65 && c.id <= 78)) batons.push(c);
+        }
+
+        renderGrupo(mayores, 'arcanos-mayores-grid', 'mayor');
+        renderGrupo(copas, 'arcanos-copas-grid', 'copas');
+        renderGrupo(deniers, 'arcanos-deniers-grid', 'deniers');
+        renderGrupo(epees, 'arcanos-epees-grid', 'epees');
+        renderGrupo(batons, 'arcanos-batons-grid', 'batons');
+    }
+
+    function renderGrupo(grupo, containerId, claseTipo) {
+        var container = document.getElementById(containerId);
+        if (!container) return;
+
+        for (var i = 0; i < grupo.length; i++) {
+            var arcano = grupo[i];
+            var thumb = document.createElement('div');
+            thumb.className = 'arcano-thumb ' + claseTipo;
+            thumb.innerHTML = '<span>' + arcano.numero_original + '</span>';
+            thumb.title = arcano.numero_original + ' - ' + arcano.arcano_es;
+            thumb.onclick = (function(a) {
+                return function() {
+                    appState.arcanoActual = { id: a.id, numero_original: a.numero_original, arcano_es: a.arcano_es };
+                    document.getElementById('arcano-numero-original').textContent = a.numero_original;
+                    document.getElementById('arcano-nombre').textContent = a.arcano_es;
+                    navigateTo('detalle-arcano');
+                };
+            })(arcano);
+            container.appendChild(thumb);
+        }
+    }
+
+    function renderDetalleArcano() {
+        if (!appState.arcanoActual) return;
+
+        var carta = null;
+        for (var i = 0; i < cartasData.length; i++) {
+            if (cartasData[i].id === appState.arcanoActual.id) {
+                carta = cartasData[i];
+                break;
+            }
+        }
+        if (!carta) return;
+
+        document.getElementById('arcano-numero-original').textContent = carta.numero_original;
+        document.getElementById('arcano-nombre').textContent = carta.arcano_es;
+        document.getElementById('arcano-id').value = carta.id;
+
+        var visContainer = document.getElementById('campos-visibles-container');
+        visContainer.innerHTML = '';
+
+        for (var i = 0; i < CAMPOS_VISIBLES.length; i++) {
+            var cv = CAMPOS_VISIBLES[i];
+            var div = document.createElement('div');
+            div.className = 'campo-visible';
+            var html = '<div class="campo-titulo">' + (cv.label || getLabel(cv.campo)) + '</div>';
+
+            if (cv.tipo === 'unico') {
+                var valor = carta[cv.campo];
+                if (valor) html += '<div>' + valor + '</div>';
+            } else {
+                var valRecta = carta[cv.campo + '_recta'] || carta[cv.campo];
+                var valInv = carta[cv.campo + '_inv'] || carta[cv.campo];
+                html += '<div class="orientacion-par"><div class="orientacion-label">Recta:</div><div>' + (valRecta || 'N/A') + '</div></div>';
+                html += '<div class="orientacion-par"><div class="orientacion-label">Invertida:</div><div>' + (valInv || 'N/A') + '</div></div>';
+            }
+            div.innerHTML = html;
+            visContainer.appendChild(div);
+        }
+
+        var fichaContainer = document.getElementById('ficha-tecnica-container');
+        fichaContainer.innerHTML = '';
+        var camposFicha = ['signo', 'elemento', 'planeta', 'numeros', 'chakra', 'mantra', 
+                          'piedras_', 'cristales', 'esencia_', 'incienso', 'aceites_', 
+                          'hierbas', 'cabala', 'color', 'planta'];
+
+        for (var i = 0; i < camposFicha.length; i++) {
+            var campo = camposFicha[i];
+            var valor = carta[campo];
+            if (valor) {
+                var div = document.createElement('div');
+                div.className = 'ficha-item';
+                div.innerHTML = '<span class="ficha-label">' + getLabel(campo) + ':</span> <span class="ficha-value">' + valor + '</span>';
+                fichaContainer.appendChild(div);
+            }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        initApp();
+    });
     </script>
 </body>
 </html>
